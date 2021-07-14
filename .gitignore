@@ -1,3 +1,4 @@
 .pylint.d
 __pycache__
 .idea/
+towards_data_science/
