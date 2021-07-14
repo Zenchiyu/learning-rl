@@ -10,3 +10,4 @@
 * [Deep RL bootcamp with Pieter Abbeel et al.](https://sites.google.com/view/deep-rl-bootcamp/lectures)
 * [Spinning up OpenAI, Learn about Deep RL](https://spinningup.openai.com/en/latest/)
 * [Policy Gradient Algorithms](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)
+* [Deep RL course, Thomas Simonini](https://simoninithomas.github.io/deep-rl-course/)
