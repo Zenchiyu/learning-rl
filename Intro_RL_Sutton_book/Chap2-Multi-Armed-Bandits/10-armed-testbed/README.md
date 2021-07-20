@@ -8,7 +8,14 @@ For each bandit problem, we generate 10 true action values from a normal distrib
 We also limit the number of action selections (time steps or horizon) to 1000.
 
 ## Average reward of epsilon-greedy action-value methods
+The filled areas are for the [95% confidence interval](https://seaborn.pydata.org/generated/seaborn.lineplot.html)
 ![image](https://user-images.githubusercontent.com/49496107/126384738-b9088551-81cb-4ee0-8566-da730a40a595.png)
+
+## Percentage of optimal action (Work In Progress)
+The probability of taking the optimal action is the probability of : taking a greedy action or (taking a random action and taking the optimal action). In other words: 1 - eps + eps*eps (this formula only works epsilon is not 0)
+
+This below is not like in Sutton's book.
+![image](https://user-images.githubusercontent.com/49496107/126391445-b54a0430-7a8f-46b2-9a9d-178f70ba139c.png)
 
 ## Remark(s) about implementation
 In the implementation, we estimated the true action values (mean of the reward distribution for each action) by computing the empirical mean incrementally (by sample-averages).
