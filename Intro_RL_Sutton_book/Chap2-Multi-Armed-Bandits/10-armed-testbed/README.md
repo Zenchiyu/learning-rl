@@ -13,6 +13,7 @@ We also limit the number of action selections (time steps or horizon) to 1000.
 
 ## Average reward of epsilon-greedy action-value methods
 The filled areas are for the [95% confidence interval](https://seaborn.pydata.org/generated/seaborn.lineplot.html)
+
 ![avg reward](./images/avg_reward.png)
 
 We can observe that the greedy method seems bounded and stuck. This can be due to the method taking greedily suboptimal actions most of the time if current estimates are bad for the optimal action (because did not try enough the optimal action to get a good sense of how good it is) and can potentially never update estimates of actions with low values.

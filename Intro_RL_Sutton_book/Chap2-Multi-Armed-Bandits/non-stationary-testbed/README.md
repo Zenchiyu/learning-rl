@@ -17,8 +17,10 @@ Poor estimations of true action values lead to poor action selections and we can
 ## Percentage of optimal action
 
 The % optimal action means : how many percent of all previous actions (for instance if we are at step 500, how many percent of the previous 500 actions) the method took the optimal action(s) (recall that the action-values change over time, the optimal action can change over time).
+
 ![percent optimal action](./images/percent_optimal_action.png)
 
+The spike at the beginning is because all true action values are the same initially
 
 ## Remark(s) about implementation
 

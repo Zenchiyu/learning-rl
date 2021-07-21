@@ -10,6 +10,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set()
 
+def argmax_indices(Q: np.ndarray):
+    """
+    Return a numpy array containing all indices of the occurrences of the max.
+    np.argmax only gives the first occurrence.
+
+    Parameters
+    ----------
+    Q : np.ndarray
+        Table containing current estimates of action values.
+
+    Returns
+    -------
+    ndarray of dtype int64
+        all indices of the occurrences of the max.
+
+    """
+    return np.argwhere(Q == np.max(Q)).flatten()
+    
 def eps_greedy(epsilon: float, Q: np.ndarray):
     """
     Epsilon-Greedy action selection with respect to Q 
@@ -33,8 +51,8 @@ def eps_greedy(epsilon: float, Q: np.ndarray):
         # random action
         return np.random.choice(np.arange(Q.size))
     else:
-        # greedy action
-        return np.argmax(Q)
+        # greedy action with ties broken randomly
+        return np.random.choice(argmax_indices(Q))
     
 def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alpha=0.1):
     """
@@ -74,16 +92,15 @@ def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alp
     
     done = False
     while not done:
-        # The optimal action (changes over time)
-        opt_action = np.argmax(env.q_star)
-        # Number of times optimal action was taken is not in N[opt_action]
     
         action = eps_greedy(epsilon, Q)
         reward, done = env.step(action)
         
         # Increment count
         N[action] += 1
-        if action == opt_action:
+        # If action is an optimal action (can have multiple)
+        # The optimal action(s) can change over time
+        if action in argmax_indices(env.q_star):
             N_opt += 1
         
         # Update estimate of action values
