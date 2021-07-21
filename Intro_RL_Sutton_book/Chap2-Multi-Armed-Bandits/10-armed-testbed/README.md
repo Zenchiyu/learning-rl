@@ -12,7 +12,7 @@ The filled areas are for the [95% confidence interval](https://seaborn.pydata.or
 ![image](https://user-images.githubusercontent.com/49496107/126384738-b9088551-81cb-4ee0-8566-da730a40a595.png)
 
 ## Percentage of optimal action
-The probability of taking the optimal action is the probability of : taking a greedy action or (taking a random action and taking the optimal action). In other words: 1 - eps + eps*eps (this formula only works epsilon is not 0)
+The probability of taking the optimal action is the probability of : taking a greedy action or (taking a random action and taking the optimal action). In other words: 1 - eps + eps*1/(number of actions) (this formula only works epsilon is not 0)
 
 ![image](https://user-images.githubusercontent.com/49496107/126393957-c67c98be-ba48-4d00-bdb0-49573f2e6427.png)
 
