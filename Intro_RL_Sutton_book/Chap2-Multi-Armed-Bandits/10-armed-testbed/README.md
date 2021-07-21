@@ -19,7 +19,9 @@ We can observe that the greedy method seems bounded and stuck. This can be due t
 
 
 ## Percentage of optimal action
-The probability of taking the optimal action is the probability of : taking a greedy action or (taking a random action and taking the optimal action). In other words: 1 - eps + eps*1/(number of actions) (this formula only works epsilon is not 0)
+The probability of taking the optimal action is the probability of : taking a greedy action or (choosing to take a random action and then taking the optimal action). In other words: 1 - eps + eps*1/(number of actions) (this formula only works epsilon is not 0)
+
+The % optimal action means : how many percent of all previous actions (for instance if we are at step 500, how many percent of the previous 500 actions) the method took the optimal action (the one with highest true action value).
 
 ![percent optimal action](./images/percent_optimal_action.png)
 

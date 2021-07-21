@@ -61,7 +61,7 @@ class NonStationaryTestBedEnv:
         Returns
         -------
         reward : int or float
-            scalar reward signal after taking a pulling the arm.
+            scalar reward signal after taking the action (pulling the arm).
         done : bool
             if the episode is finished or not.
         """

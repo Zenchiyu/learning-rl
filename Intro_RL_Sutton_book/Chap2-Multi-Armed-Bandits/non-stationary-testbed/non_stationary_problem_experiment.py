@@ -12,7 +12,7 @@ sns.set()
 
 def eps_greedy(epsilon: float, Q: np.ndarray):
     """
-    Greedy action selection with respect to Q 
+    Epsilon-Greedy action selection with respect to Q 
     (one single state, situation. Non associative setting)
 
     Parameters
@@ -50,8 +50,6 @@ def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alp
 
     Returns
     -------
-    np.ndarray
-        Actual action-values.
     list_Q : list
         ndarrays containing estimates of action values for each time step.
     list_reward : list
@@ -68,8 +66,6 @@ def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alp
     N = np.zeros(env.action_space.shape)
     # Number of times optimal action was taken
     N_opt = 0
-    # The optimal action
-    opt_action = np.argmax(env.q_star)
     
     list_Q = []
     list_reward = []
@@ -78,6 +74,10 @@ def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alp
     
     done = False
     while not done:
+        # The optimal action (changes over time)
+        opt_action = np.argmax(env.q_star)
+        # Number of times optimal action was taken is not in N[opt_action]
+    
         action = eps_greedy(epsilon, Q)
         reward, done = env.step(action)
         
@@ -93,14 +93,14 @@ def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alp
             Q[action] += alpha*(reward - Q[action])
         else:
             raise Exception("Estimation method does not exist.")
-            
+                
         # Record Q[action], reward, N_opt : used for plotting
         list_Q += [Q[action]]
         list_reward += [reward]
         list_N_opt += [N_opt]
         
     env.reset()
-    return env.q_star, list_Q, list_reward, list_N_opt
+    return list_Q, list_reward, list_N_opt
     
 if __name__ == "__main__":
     np.random.seed(42)  # for reproducibility
@@ -108,8 +108,8 @@ if __name__ == "__main__":
     n_runs = 2000
     
     # Eps-Greedy : epsilon = 0.1 for both
-    _, _, rewardsSampleAvg, N_optsSampleAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="sample-avg") for _ in range(n_runs)])
-    _, _, rewardsExpRecencyWeightedAvg, N_optsExpRecencyWeightedAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="exponential recency-weighted avg") for _ in range(n_runs)])
+    _, rewardsSampleAvg, N_optsSampleAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="sample-avg") for _ in range(n_runs)])
+    _, rewardsExpRecencyWeightedAvg, N_optsExpRecencyWeightedAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="exponential recency-weighted avg") for _ in range(n_runs)])
     
     # Changing tuples of tuples into arrays
     arr_rewardsSampleAvg = np.array(rewardsSampleAvg)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # Average Reward
     plt.figure(figsize=(20, 10))
     # Get array containing 0 1 2 3 ... 999 repeated 2000 times
-    xs = np.broadcast_to(np.arange(horizon), arr_rewardsSampleAvg.shape).flatten()
+    xs = np.tile(np.arange(horizon), 2000)
     
     sns.lineplot(x=xs, y=arr_rewardsSampleAvg.flatten())
     sns.lineplot(x=xs, y=arr_rewardsExpRecencyWeightedAvg.flatten())
