@@ -13,7 +13,7 @@ We also limit the number of action selections (time steps or horizon) to 1000.
 
 ## Average reward of epsilon-greedy action-value methods
 The filled areas are for the [95% confidence interval](https://seaborn.pydata.org/generated/seaborn.lineplot.html)
-![image](https://user-images.githubusercontent.com/49496107/126384738-b9088551-81cb-4ee0-8566-da730a40a595.png)
+![avg reward](./images/avg_reward.PNG)
 
 We can observe that the greedy method seems bounded and stuck. This can be due to the method taking greedily suboptimal actions most of the time if current estimates are bad for the optimal action (because did not try enough the optimal action to get a good sense of how good it is) and can potentially never update estimates of actions with low values.
 
@@ -21,7 +21,7 @@ We can observe that the greedy method seems bounded and stuck. This can be due t
 ## Percentage of optimal action
 The probability of taking the optimal action is the probability of : taking a greedy action or (taking a random action and taking the optimal action). In other words: 1 - eps + eps*1/(number of actions) (this formula only works epsilon is not 0)
 
-![image](https://user-images.githubusercontent.com/49496107/126393957-c67c98be-ba48-4d00-bdb0-49573f2e6427.png)
+![percent optimal action](./images/percent_optimal_action.PNG)
 
 Epsilon=0.01 increases slowly but will perform the best in the two plots.
 
