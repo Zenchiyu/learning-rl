@@ -54,7 +54,7 @@ def eps_greedy(epsilon: float, Q: np.ndarray):
         # greedy action with ties broken randomly
         return np.random.choice(argmax_indices(Q))
     
-def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alpha=0.1):
+def single_run(epsilon: float, horizon: int, estimation_method: str="sample-avg", alpha: float=0.1):
     """
     One single run with a Nonstationary problem with time steps = horizon.
 
@@ -65,7 +65,13 @@ def single_run(epsilon: float, horizon: int, estimation_method="sample-avg", alp
         1-epsilon is the probability to take a greedy action.
     horizon : int
         Maximum time steps for the run.
-
+    estimation_method : str, optional
+        Method used to estimate action values. The default is "sample-avg".
+        For constant step size parameter, use "exponential recency-weighted avg"
+        and set alpha parameter
+    alpha : float
+        Constant step size parameter. The default is 0.1.
+        
     Returns
     -------
     list_Q : list

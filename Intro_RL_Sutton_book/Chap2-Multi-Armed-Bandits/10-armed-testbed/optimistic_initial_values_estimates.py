@@ -47,8 +47,6 @@ if __name__ == "__main__":
     
     # Optimal action
     plt.figure(figsize=(20, 10))
-    # Get array containing 0 1 2 3 ... 999 repeated 2000 times
-    xs = np.broadcast_to(np.arange(horizon), arr_N_optsGreedy.shape).flatten()
     
     # Divide by 1 2 3 ... 1000 elementwise to get the percentage correctly
     sns.lineplot(x=xs, y=arr_N_optsOptimisticGreedy.flatten()/(xs+1))
