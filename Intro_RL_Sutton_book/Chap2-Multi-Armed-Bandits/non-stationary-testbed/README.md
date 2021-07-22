@@ -20,8 +20,6 @@ The % optimal action means : how many percent of all previous actions (for insta
 
 ![percent optimal action](./images/percent_optimal_action.png)
 
-The spike at the beginning is because all true action values are the same initially
-
 ## Remark(s) about implementation
 
 We always use the incremental implementation to update estimates.
