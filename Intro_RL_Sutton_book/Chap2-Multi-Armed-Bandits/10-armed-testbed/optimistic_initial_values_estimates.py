@@ -6,7 +6,7 @@ In this file we try to replicate experiments for optimistic initial values
 from Sutton and Barto's book on 10 armed testbed with constant step size
 parameter (to keep the permanent bias).
 """
-from exploration_exploitation_experiment import *
+from exploration_exploitation_functions import *
     
 if __name__ == "__main__":
     np.random.seed(42)  # for reproducibility

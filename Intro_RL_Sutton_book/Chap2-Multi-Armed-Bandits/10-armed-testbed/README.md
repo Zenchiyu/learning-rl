@@ -4,7 +4,7 @@
 
 We try to replicate a suite of test problems called 10-armed Testbed from Sutton and Barto's book as well as the numerical experiments showing the effects of epsilon-greedy methods, optimistic initial values estimates and Upper-Confidence-Bound (UCB) action selection method.
 
-**Disclaimer: ** My work is not necessarily free of mistakes. Please contact me if you see possible improvements so I can update the files.
+**Disclaimer:** My work is not necessarily free of mistakes. Please contact me if you see possible improvements so I can update the files.
 
 ---
 
@@ -91,17 +91,19 @@ Blue is for optimistic greedy, orange for realistic epsilon-greedy and green for
 
 We can observe that, as in the book, optimistic greedy performs worse than due the exploration (with greedy action selections ! ) at the beginnning then performs better afterwards. The agent becomes "disappointed" in most of the rewards he gets at the beginning because his initial estimates were very optimistic (true action values have 0 mean and unit variance). For the same reason, for the 10 first actions, the decision-maker tried all actions greedily and this gives in average about 10 % optimal action.
 
-<u>Remark:</u> the graph does not look like exactly as in the book. In the book, although curves are more noisy and the spike around step 10 is a lot higher, the rough interpretation holds.
+<u>Remark:</u> Although curves are more noisy and the spike around step 10 is a lot higher in the book, the rough interpretation holds.
 
 ### Remark(s) about implementation
 
 We added "pessimistic greedy" method in green with initial estimates of -5 just to observe that if the decision-maker is pessimistic about all actions, the first time he tries an action, he gets a high reward and due to that, if the decision-maker follows a greedy strategy, he will end up stuck on that action and never try other actions. Over 2000 runs, due to the ties broken uniformly randomly, we obtain in average about 1/10 and this is the probability of taking the optimal action given by random uniform action selection (10 actions in total).
 
-## Upper-Confidence-Bound (Work In Progress)
+## Upper-Confidence-Bound
 
-Upper-Confidence-Bound is non-parametric method based on the Hoeffding's inequality. Formula is in the book and David Silver lecture 8 shows how to derive it. Here it's only applied when we have stationary reward distributions.
+Upper-Confidence-Bound is non-parametric method based on the Hoeffding's inequality. The formula is defined in the book and David Silver shows in lecture 8 (on exploration-exploitation) how to derive it. Here it's only applied when we have stationary reward distributions.
 
-The main intuition is selecting actions greedily not based only on the estimates but on the potential of the action being optimal. We apply an argmax on: the current estimates plus some uncertainty term : argmax a (Q(a) + U(a)). When we pick an action, U(a) decreases and when we pick another action instead of a, U(a) increases. The logarithm term in the numerator in U(a) shows that the increase in uncertainty is less and less (but still unbounded) (the denominator grows faster (asymptotically) than the numerator if both grows at the same time).
+The main idea of UCB is selecting actions greedily not based only on the estimates but on the potential of the action being optimal. We apply an argmax on: the current estimates plus some uncertainty term : argmax a (Q(a) + U(a)). When we pick an action, U(a) decreases (we become a bit more certain about the potential of the action being optimal or not) and when we pick another action instead of a, U(a) increases. The logarithm term in the numerator of U(a) shows that the increase in uncertainty is less and less (but still unbounded) (the denominator grows faster (asymptotically) than the numerator if both grows at the same time).
+
+If we apply the formula blindly, we would be dividing by zero on actions that were never taken. The book explains that actions that were never taken before are maximizing actions (p. 36). Consequently, we include actions that were never taken before as maximizing actions (in the set prior to adding these actions, we had actions such that Q(a) + U(a) are maximal).
 
 ### Average reward of  UCB versus epsilon-greedy
 
@@ -109,13 +111,15 @@ Blue is for UCB with c=2, orange for c=1 and green for epsilon-greedy with epsil
 
 ![percent optimal action](./images/avg_reward_ucb.png)
 
-
+<u>Remark:</u> Although there's a spike around step 11 in the book that we don't see in our graph, the rest looks similar.
 
 ### Percentage of optimal action of  UCB versus epsilon-greedy
 
-![percent optimal action](./images/percent_optimal_action__ucb.png)
+![percent optimal action](./images/percent_optimal_action_ucb.png)
 
 
 
 ### Remark(s) about implementation
+
+As said previously, we added actions that were never taken as maximizing actions.
 
