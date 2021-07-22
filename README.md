@@ -11,3 +11,8 @@
 * [Spinning up OpenAI, Learn about Deep RL](https://spinningup.openai.com/en/latest/)
 * [Policy Gradient Algorithms](https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html)
 * [Deep RL course, Thomas Simonini](https://simoninithomas.github.io/deep-rl-course/)
+
+### Coursera or others
+* [Practical RL](https://github.com/yandexdataschool/Practical_RL)
+
+
