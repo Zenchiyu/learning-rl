@@ -5,6 +5,14 @@ We'll write "Replica" for the codes where we tried to replicate some figures. Th
 My work is not necessarily free of mistakes. Please contact me if you see possible improvements so I can update the files.
 
 ## Chapter 1 - Introduction
+
+### Replica
+### Exercises
+### Notes
+
+# Tabular Solution Methods
+## Chapter 2 - Multi-armed Bandits
+
 ### Replica
 * [Figure 2.2: Average performance of epsilon-greedy action-value methods on the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed#effectiveness-of-greedy-or-epsilon-greedy-action-value-methods)
 * [Figure 2.3: The effect of optimistic initial action-value estimates on the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed#optimistic-initial-values)
@@ -18,12 +26,6 @@ baseline on variant of the 10-armed testbed
 difficulties that sample-average methods have for nonstationary problems](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/non-stationary-testbed#non-stationary-testbed)
 * (Work In Progress) Exercice 2.11: Parameter Study for nonstationary case
 
-### Notes
-
-# Tabular Solution Methods
-## Chapter 2 - Multi-armed Bandits
-### Replica
-### Exercises
 ### Notes
 
 ## Chapter 3 - Finite Markov Decision Processes (Finite MDP)
