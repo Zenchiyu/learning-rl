@@ -15,20 +15,20 @@ if __name__ == "__main__":
     
     # All methods use constant step size trick with alpha=0.1 (default)
     # Optimistic Greedy : Q_init = 5, epsilon = 0
-    _, _, rewardsOptimisticGreedy, N_optsOptimisticGreedy = zip(*[single_run(epsilon=0, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=5) for _ in range(n_runs)])
+    _, _, rewardsOptimisticGreedy, p_optsOptimisticGreedy = zip(*[single_run(epsilon=0, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=5) for _ in range(n_runs)])
     # Realistic Eps-Greedy : Q_init = 0, epsilon = 0.1
-    _, _, rewardsRealisticEpsGreedy, N_optsRealisticEpsGreedy = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="exponential recency-weighted avg") for _ in range(n_runs)])
+    _, _, rewardsRealisticEpsGreedy, p_optsRealisticEpsGreedy = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="exponential recency-weighted avg") for _ in range(n_runs)])
     # Pessimistic Greedy (not in the book) : Q_init = -5, epsilon = 0
-    _, _, rewardsPessimisticGreedy, N_optsPessimisticGreedy = zip(*[single_run(epsilon=0, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=-5) for _ in range(n_runs)])
+    _, _, rewardsPessimisticGreedy, p_optsPessimisticGreedy = zip(*[single_run(epsilon=0, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=-5) for _ in range(n_runs)])
     
     # Changing tuples of tuples into arrays
     arr_rewardsOptimisticGreedy = np.array(rewardsOptimisticGreedy)
     arr_rewardsRealisticEpsGreedy = np.array(rewardsRealisticEpsGreedy)
     arr_rewardsPessimisticGreedy = np.array(rewardsPessimisticGreedy)
     
-    arr_N_optsOptimisticGreedy = np.array(N_optsOptimisticGreedy)
-    arr_N_optsRealisticEpsGreedy = np.array(N_optsRealisticEpsGreedy)
-    arr_N_optsPessimisticGreedy = np.array(N_optsPessimisticGreedy)
+    arr_p_optsOptimisticGreedy = np.array(p_optsOptimisticGreedy)
+    arr_p_optsRealisticEpsGreedy = np.array(p_optsRealisticEpsGreedy)
+    arr_p_optsPessimisticGreedy = np.array(p_optsPessimisticGreedy)
     
     # Plots (takes a long time with lineplot)
     # Average Reward
@@ -48,10 +48,9 @@ if __name__ == "__main__":
     # Optimal action
     plt.figure(figsize=(20, 10))
     
-    # Divide by 1 2 3 ... 1000 elementwise to get the percentage correctly
-    sns.lineplot(x=xs, y=arr_N_optsOptimisticGreedy.flatten()/(xs+1))
-    sns.lineplot(x=xs, y=arr_N_optsRealisticEpsGreedy.flatten()/(xs+1))
-    sns.lineplot(x=xs, y=arr_N_optsPessimisticGreedy.flatten()/(xs+1))
+    sns.lineplot(x=xs, y=arr_p_optsOptimisticGreedy.flatten())
+    sns.lineplot(x=xs, y=arr_p_optsRealisticEpsGreedy.flatten())
+    sns.lineplot(x=xs, y=arr_p_optsPessimisticGreedy.flatten())
     plt.legend([r"$Q_1(a)=5, \epsilon=0, \alpha=0.1$", r"$Q_1(a)=0, \epsilon=0.1, \alpha=0.1$", r"$Q_1(a)=-5, \epsilon=0, \alpha=0.1$"])
     plt.ylabel("% Optimal Action")
     plt.xlabel("Steps")

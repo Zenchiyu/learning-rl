@@ -78,8 +78,9 @@ def single_run(epsilon: float, horizon: int, estimation_method: str="sample-avg"
         ndarrays containing estimates of action values for each time step.
     list_reward : list
         rewards for each time step.
-    list_N_opt : list
-        number of times optimal action was taken for each time step.
+    p_opt : ndarray of shape (horizon, )
+        ndarray containing 1's and 0's with 1's at time steps where we took
+        an optimal action.
 
     """
     env = NonStationaryTestBedEnv(horizon=horizon)
@@ -88,12 +89,12 @@ def single_run(epsilon: float, horizon: int, estimation_method: str="sample-avg"
     Q = np.zeros(env.action_space.shape)
     # Number of times action was taken
     N = np.zeros(env.action_space.shape)
-    # Number of times optimal action was taken
-    N_opt = 0
+    # Array containing 1's and 0's with 1's at time steps where we took
+    # an optimal action
+    p_opt = np.zeros((horizon,))
     
     list_Q = []
     list_reward = []
-    list_N_opt = []
     
     
     done = False
@@ -107,7 +108,7 @@ def single_run(epsilon: float, horizon: int, estimation_method: str="sample-avg"
         # If action is an optimal action (can have multiple)
         # The optimal action(s) can change over time
         if action in argmax_indices(env.q_star):
-            N_opt += 1
+            p_opt[env.t - 1] += 1  # t-1 because t was incremented
         
         # Update estimate of action values
         if estimation_method == "sample-avg":
@@ -117,13 +118,12 @@ def single_run(epsilon: float, horizon: int, estimation_method: str="sample-avg"
         else:
             raise Exception("Estimation method does not exist.")
                 
-        # Record Q[action], reward, N_opt : used for plotting
+        # Record Q[action], reward: used for plotting
         list_Q += [Q[action]]
         list_reward += [reward]
-        list_N_opt += [N_opt]
         
     env.reset()
-    return list_Q, list_reward, list_N_opt
+    return list_Q, list_reward, p_opt
     
 if __name__ == "__main__":
     np.random.seed(42)  # for reproducibility
@@ -131,15 +131,15 @@ if __name__ == "__main__":
     n_runs = 2000
     
     # Eps-Greedy : epsilon = 0.1 for both
-    _, rewardsSampleAvg, N_optsSampleAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="sample-avg") for _ in range(n_runs)])
-    _, rewardsExpRecencyWeightedAvg, N_optsExpRecencyWeightedAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="exponential recency-weighted avg") for _ in range(n_runs)])
+    _, rewardsSampleAvg, p_optsSampleAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="sample-avg") for _ in range(n_runs)])
+    _, rewardsExpRecencyWeightedAvg, p_optsExpRecencyWeightedAvg = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="exponential recency-weighted avg") for _ in range(n_runs)])
     
     # Changing tuples of tuples into arrays
     arr_rewardsSampleAvg = np.array(rewardsSampleAvg)
     arr_rewardsExpRecencyWeightedAvg = np.array(rewardsExpRecencyWeightedAvg)
     
-    arr_N_optsSampleAvg = np.array(N_optsSampleAvg)
-    arr_N_optsExpRecencyWeightedAvg = np.array(N_optsExpRecencyWeightedAvg)
+    arr_p_optsSampleAvg = np.array(p_optsSampleAvg)
+    arr_p_optsExpRecencyWeightedAvg = np.array(p_optsExpRecencyWeightedAvg)
     
     # Plots (takes a long time with lineplot)
     # Average Reward
@@ -157,9 +157,8 @@ if __name__ == "__main__":
     
     # Optimal action
     plt.figure(figsize=(20, 10))
-    # Divide by 1 2 3 ... 1000 elementwise to get the percentage correctly
-    sns.lineplot(x=xs, y=arr_N_optsSampleAvg.flatten()/(xs+1))
-    sns.lineplot(x=xs, y=arr_N_optsExpRecencyWeightedAvg.flatten()/(xs+1))
+    sns.lineplot(x=xs, y=arr_p_optsSampleAvg.flatten())
+    sns.lineplot(x=xs, y=arr_p_optsExpRecencyWeightedAvg.flatten())
     
     plt.legend([r"$\alpha_n(a)=\frac{1}{n}, \epsilon=0.1$", r"$\alpha_n(a)=0.1, \epsilon=0.1$"])
     plt.ylabel("% Optimal Action")

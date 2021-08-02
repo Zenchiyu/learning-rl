@@ -6,6 +6,10 @@ We try to replicate a suite of test problems called 10-armed Testbed from Sutton
 
 **Disclaimer:** My work is not necessarily free of mistakes. Please contact me if you see possible improvements so I can update the files.
 
+
+
+**Note:** We broke ties randomly for the argmax instead of picking the first action all the time.
+
 ---
 
 ## Introduction
@@ -60,7 +64,9 @@ We can observe that the greedy method seems bounded and stuck. This can be due t
 
 The probability of taking the optimal action is the probability of : taking a greedy action or (choosing to take a random action and then taking the optimal action). In other words: 1 - eps + eps*1/(number of actions) (this formula only works if epsilon is not 0)
 
-The % optimal action means : how many percent of all previous actions (for instance if we are at step 500, how many percent of the previous 500 actions) the method took the optimal action (the one with highest true action value).
+**The % optimal action means : for a particular time step; how many percent out of all runs did we take an optimal action ?**
+
+It does not mean this : how many percent of all previous actions (for instance if we are at step 500, how many percent of the previous 500 actions) the method took the optimal action (the one with highest true action value). To obtain this we would have to divide not everything by the 1000 but by each time step element-wise.
 
 ![percent optimal action](./images/percent_optimal_action.png)
 
@@ -69,7 +75,7 @@ Epsilon=0.01 increases slowly but will perform the best in the two plots.
 ### Remark(s) about implementation
 
 In the implementation, we estimated the true action values (mean of the reward distribution for each action) by computing the empirical mean incrementally (by sample-averages).
-To obtain the percentage of optimal action curves, we have to divide not everything by the 1000 but by each time step element-wise.
+To obtain the percentage of optimal action curve, we have to set 1's for the time steps where we took an optimal action then do averages time-step-wise.
 
 ---
 
@@ -83,15 +89,13 @@ As explained earlier, estimating using constant step size parameter keeps a perm
 
 Blue is for optimistic greedy, orange for realistic epsilon-greedy and green for pessimistic greedy
 
-![percent optimal action](./images/avg_reward_optimistic_initial_values.png)
+![avg reward](./images/avg_reward_optimistic_initial_values.png)
 
 ### Percentage of optimal action of optimistic greedy, realistic epsilon-greedy and pessimistic greedy
 
 ![percent optimal action](./images/percent_optimal_action_optimistic_initial_values.png)
 
-We can observe that, as in the book, optimistic greedy performs worse than due the exploration (with greedy action selections ! ) at the beginnning then performs better afterwards. The agent becomes "disappointed" in most of the rewards he gets at the beginning because his initial estimates were very optimistic (true action values have 0 mean and unit variance). For the same reason, for the 10 first actions, the decision-maker tried all actions greedily and this gives in average about 10 % optimal action.
-
-<u>Remark:</u> Although curves are more noisy and the spike around step 10 is a lot higher in the book, the rough interpretation holds.
+We can observe that, as in the book, optimistic greedy performs worse than realistic epsilon-greedy due the exploration (with greedy action selections ! ) at the beginning then performs better afterwards. The agent becomes "disappointed" in most of the rewards he gets at the beginning because his initial estimates were very optimistic (true action values have 0 mean and unit variance). For the same reason, for the 10 first actions, the decision-maker tried all actions greedily and this gives in average about 10 % optimal action.
 
 ### Remark(s) about implementation
 
@@ -109,7 +113,7 @@ If we apply the formula blindly, we would be dividing by zero on actions that we
 
 Blue is for UCB with c=2, orange for c=1 and green for epsilon-greedy with epsilon=0.1
 
-![percent optimal action](./images/avg_reward_ucb.png)
+![avg reward](./images/avg_reward_ucb.png)
 
 <u>Remark:</u> Although there's a spike around step 11 in the book that we don't see in our graph, the rest looks similar.
 
