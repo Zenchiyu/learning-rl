@@ -9,9 +9,9 @@ My work is not necessarily free of mistakes. Please contact me if you see possib
 * [Figure 2.2: Average performance of epsilon-greedy action-value methods on the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed#effectiveness-of-greedy-or-epsilon-greedy-action-value-methods)
 * [Figure 2.3: The effect of optimistic initial action-value estimates on the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed#optimistic-initial-values)
 * [Figure 2.4: Average performance of UCB action selection on the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed#upper-confidence-bound)
-* (Work In Progress) Figure 2.5: : Average performance of the gradient bandit algorithm with and without a reward
+* (Work In Progress) Figure 2.5: Average performance of the gradient bandit algorithm with and without a reward
 baseline on variant of the 10-armed testbed
-* (Work In Progress) Figure 2.6: : A parameter study of the various bandit algorithms presented in this chapter.
+* (Work In Progress) Figure 2.6: A parameter study of the various bandit algorithms presented in this chapter.
 
 ### Exercises
 * [Exercise 2.5: Experiment to demonstrate the
