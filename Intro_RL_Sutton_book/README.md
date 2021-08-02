@@ -11,11 +11,12 @@ My work is not necessarily free of mistakes. Please contact me if you see possib
 * [Figure 2.4: Average performance of UCB action selection on the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed#upper-confidence-bound)
 * (Work In Progress) Figure 2.5: : Average performance of the gradient bandit algorithm with and without a reward
 baseline on variant of the 10-armed testbed
+* (Work In Progress) Figure 2.6: : A parameter study of the various bandit algorithms presented in this chapter.
 
 ### Exercises
 * [Exercise 2.5: Experiment to demonstrate the
 difficulties that sample-average methods have for nonstationary problems](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/non-stationary-testbed#non-stationary-testbed)
-* Exercice 2.11: Parameter Study for nonstationary case
+* (Work In Progress) Exercice 2.11: Parameter Study for nonstationary case
 
 ### Notes
 
