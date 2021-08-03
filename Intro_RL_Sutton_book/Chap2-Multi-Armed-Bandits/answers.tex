@@ -40,7 +40,7 @@ random. On which time steps did this definitely occur? On which time steps could
 possibly have occurred?
 
 \bigskip
-We already recalled what was the $\epsilon$-greedy action selection methods. We can recall quickly that sample-average action-value estimates compute estimates $Q_t(a)$ based on an empirical mean of the rewards received when the action $a$ is taken. The empirical means can be computed incrementally as explained in the book.
+We already recalled what were the $\epsilon$-greedy action selection methods. We can recall quickly that sample-average action-value estimates compute estimates $Q_n(a)$ based on an empirical mean of the rewards received when the action $a$ is taken. The empirical means can be computed incrementally as explained in the book.
 
 To know in what time step did the $\epsilon$ case definitely occur, we use the information that the decision-maker only picks a non-greedy action (not actions with highest current estimates) when exploring.
 
@@ -54,7 +54,7 @@ For this reason, we also compute estimates after each action-selection:
 
 \item Take action $2$, receive reward $2$ and update estimates with $Q_4(2)=\frac{1 + (-2) + 2}{3} = \frac{1}{3}$ and keep $Q_2(1)=-1,\, Q_1(a)=0,\, \forall a \notin \{1, 2\}$. For the next time step, if we pick another action than $2$ then it would be due to exploration. 
 
-\item Take action $3$, receive reward $0$ and update estimates with $Q_2(3)=0$ and keep $Q_4(2) = \frac{1}{3},\, Q_2(1)=-1,\, Q_1(a)=0,\, \forall a \notin \{1, 2, 3\}$.
+\item Take action $3$, receive reward $0$ and update estimates with $Q_2(3)=0$ and keep $Q_4(2) = \frac{1}{3},\, Q_2(1)=-1,\, Q_1(4)=0$.
 
 \end{enumerate}
 
@@ -64,10 +64,58 @@ The $\epsilon$ case could have occurred at all time steps but it definitely occu
 the long run in terms of cumulative reward and probability of selecting the best action?
 How much better will it be? Express your answer quantitatively.
 
+\bigskip
+Action-value method with $\epsilon=0.01$ will perform best in the long run in terms of cumulative reward and probability of selecting the best action.
+
+The probability of selecting the best action $a_*$ for $\epsilon$-greedy methods with $\epsilon > 0$ (with sample-averages and on stationary problems) can be written as the probability of taking an optimal action when exploring ($\epsilon$ case, action selected at random) plus the probability of taking a greedy action (we can add them because in one single action selection, we cannot behave greedily at the same time as non-greedily. Moreover the second part with greedy action assumes that the estimates of the optimal actions converge to the action values).
+
+\begin{equation}
+\lim_{t\to\infty}\mathbb{P}[A_t = a_*] = \epsilon\cdot\frac{1}{k}+ 1 - \epsilon
+\end{equation}
+
+This formula does not work for $\epsilon = 0$ (greedy) because if $\epsilon=0$, some actions can be selected a finite number of times asymptotically. As consequence, some estimates might not converge to the true action values.
+
+For $10$-armed testbed, $k=10$ and by applying the formula with $\epsilon=0.1$ we get $0.01 + 1 - 0.1 = 0.91$. If we apply the formula with $\epsilon=0.01$ then we get $0.001 + 1 - 0.01 = 0.991$.
+
+
 \paragraph{\textit{Exercise 2.4} (p. 33)} If the step-size parameters, $\alpha_n$, are not constant, then the estimate $Q_n$ is
 a weighted average of previously received rewards with a weighting different from that
 given by ($2.6$). What is the weighting on each prior reward for the general case, analogous
 to ($2.6$), in terms of the sequence of step-size parameters?
+
+\bigskip
+Recall that in this section, the book focused on estimating/tracking incrementally the value of a single action for nonstationary problem and this was done by using a constant-step-size parameter in the incremental update rule that we rewrite below
+\begin{equation}
+Q_{n+1} \doteq Q_n + \alpha_n [R_n - Q_n]
+\end{equation}
+where $R_n$ is the reward received after the $n$-th selection of the action and $\alpha_n=\frac{1}{n}$ for the incremental implementation of sample-averages (empirical mean) or $\alpha_n=\alpha \in (0, 1]$ for the exponential recency-weighted average.
+
+Equation $(2.6)$ showed that if we update estimates using exponential recency-weighted average then $Q_{n+1}$ was a weighted average of past rewards and the initial estimate $Q_1$.
+
+We can try to do the same but for the general case where $\alpha_n$ is not necessarily $\frac{1}{n}$ or a constant $\alpha \in (0,1]$.
+\begin{equation}
+\begin{split}
+Q_{n+1} &= Q_n + \alpha_n [R_n - Q_n] = \alpha_n R_n + (1-\alpha_n) Q_n\\
+&= \alpha_n R_n + (1-\alpha_n) [\alpha_{n-1} R_{n-1} + (1-\alpha_{n-1})Q_{n-1}]\\
+&= \alpha_n R_n + (1-\alpha_n) \alpha_{n-1} R_{n-1} + (1-\alpha_n)\cdot (1-\alpha_{n-1})Q_{n-1}\\
+&= Q_1 \prod_{k=1}^n (1-\alpha_k) + \sum_{i=1}^n \alpha_i R_i \prod_{j=i+1}^n (1-\alpha_j)
+\end{split}
+\end{equation}
+
+Each reward $R_i$ is weighted by $\alpha_i \prod_{j=i+1}^n (1-\alpha_j)$.
+
+\bigskip
+We can verify by recurrence that it's a weighted sum, i.e $\prod_{k=1}^n (1-\alpha_k) + \sum_{i=1}^n \alpha_i \prod_{j=i+1}^n (1-\alpha_j) = 1$. For $n=1$ we have
+\begin{equation}
+1-\alpha_1 + \alpha_1 = 1
+\end{equation}
+Suppose the formula is true for $n$, let's prove that it holds for $n+1$. Let $H_n = \prod_{k=1}^n (1-\alpha_k) + \sum_{i=1}^n \alpha_i \prod_{j=i+1}^n (1-\alpha_j) = 1$
+
+\begin{equation}
+\prod_{k=1}^{n+1} (1-\alpha_k) + \sum_{i=1}^{n+1} \alpha_i \prod_{j=i+1}^{n+1} (1-\alpha_j) = H_n \cdot (1-\alpha_{n+1}) + \alpha_{n+1} = 1
+\end{equation}
+
+From the general formula, we can obtain equation $(2.6)$ of the book for exponential recency-weighted average as well as the sample-average methods where $R_i$'s are weighted by $\frac{1}{i} \cdot \prod_{j=i+1}^n \left(1-\frac{1}{j}\right) = \frac{1}{i} \cdot \frac{n-1}{n} \cdot \frac{n-2}{n-1} \cdot \hdots \cdot \frac{i}{i+1} = \frac{1}{n}$
 
 \paragraph{\textit{Exercise 2.5 (programming)} (p. 33)} Design and conduct an experiment to demonstrate the
 difficulties that sample-average methods have for nonstationary problems. Use a modified version of the $10$-armed testbed in which all the $q_*(a)$ start out equal and then take independent random walks (say by adding a normally distributed increment with mean $0$ and standard deviation $0.01$ to all the $q_*(a)$ on each step). Prepare plots like Figure $2.2$
