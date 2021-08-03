@@ -2,3 +2,9 @@
 __pycache__
 .idea/
 towards_data_science/
+
+# Latex
+*.aux
+*.log
+*.synctex.gz
+*.out
