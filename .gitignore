@@ -8,3 +8,5 @@ towards_data_science/
 *.log
 *.synctex.gz
 *.out
+*.bbl
+*.blg
