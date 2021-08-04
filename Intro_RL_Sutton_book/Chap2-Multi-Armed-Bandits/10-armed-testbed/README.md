@@ -1,6 +1,6 @@
 # 10-armed Testbed
 
----
+
 
 We try to replicate a suite of test problems called 10-armed Testbed from Sutton and Barto's book as well as the numerical experiments showing the effects of epsilon-greedy methods, optimistic initial values estimates and Upper-Confidence-Bound (UCB) action selection method. In this `README.md`, we only focus on action-value methods, methods that first estimate the values of the actions and then use them to pick actions. Gradient bandit algorithm is explained quickly in the `gradient_bandit.md` file.
 
@@ -10,7 +10,7 @@ We try to replicate a suite of test problems called 10-armed Testbed from Sutton
 
 **Note:** We broke ties randomly for the argmax instead of picking the first action all the time.
 
----
+
 
 ## Introduction
 
@@ -41,7 +41,7 @@ The book explains that the constant step-size parameter can be useful for tracki
 
 For nonstationary problems, the book explains a constant step-size trick in the exercises combining advantages of sample-average methods that do not have any initial bias after each action is selected at least once and of exponentially recency-weighted average that is useful to track nonstationary problems. The trick is to have a step-size parameter starting at 1 and decreasing towards a constant step-size that we fix. As effect, the initial bias disappears once all actions are selected at least once.
 
----
+
 
 ## Effectiveness of greedy or epsilon-greedy action-value methods
 
@@ -77,7 +77,7 @@ Epsilon=0.01 increases slowly but will perform the best in the two plots.
 In the implementation, we estimated the true action values (mean of the reward distribution for each action) by computing the empirical mean incrementally (by sample-averages).
 To obtain the percentage of optimal action curve, we have to set 1's for the time steps where we took an optimal action then do averages time-step-wise.
 
----
+
 
 ## Optimistic Initial Values 
 
@@ -111,11 +111,11 @@ If we apply the formula blindly, we would be dividing by zero on actions that we
 
 ### Average reward of  UCB versus epsilon-greedy
 
-Blue is for UCB with c=2, orange for c=1 and green for epsilon-greedy with epsilon=0.1
+Blue is for UCB with c=1, orange for c=2 and green for epsilon-greedy with epsilon=0.1
 
 ![avg reward](./images/avg_reward_ucb.png)
 
-<u>Remark:</u> Although there's a spike around step 11 in the book that we don't see in our graph, the rest looks similar.
+Remark: The orange curve is similar to the blue curve in the book (both c=2). The spike is less prominent for c=1.
 
 ### Percentage of optimal action of  UCB versus epsilon-greedy
 
