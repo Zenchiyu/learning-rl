@@ -14,11 +14,11 @@ if __name__ == "__main__":
     n_runs = 2000
     
     # UCB c=2
-    _, _, rewardsUCB_c2, p_optsUCB_c2 = zip(*[single_run(epsilon=0, horizon=horizon, action_selection_method="ucb", c=2) for _ in range(n_runs)])
+    _, _, rewardsUCB_c2, p_optsUCB_c2 = zip(*[single_run(horizon=horizon, action_selection_method="ucb", c=2) for _ in range(n_runs)])
     # UCB c=1
-    _, _, rewardsUCB_c1, p_optsUCB_c1 = zip(*[single_run(epsilon=0, horizon=horizon, action_selection_method="ucb", c=1) for _ in range(n_runs)])
+    _, _, rewardsUCB_c1, p_optsUCB_c1 = zip(*[single_run(horizon=horizon, action_selection_method="ucb", c=1) for _ in range(n_runs)])
     # Eps-Greedy : epsilon = 0.1
-    q_stars0dot1, Qs0dot1, rewards0dot1, p_opts0dot1 = zip(*[single_run(epsilon=0.1, horizon=horizon) for _ in range(n_runs)])
+    q_stars0dot1, Qs0dot1, rewards0dot1, p_opts0dot1 = zip(*[single_run(horizon=horizon, epsilon=0.1) for _ in range(n_runs)])
     
     # Changing tuples of tuples into arrays
     arr_rewardsUCB_c2 = np.array(rewardsUCB_c2)

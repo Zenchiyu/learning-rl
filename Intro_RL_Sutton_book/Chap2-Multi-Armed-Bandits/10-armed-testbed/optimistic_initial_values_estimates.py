@@ -15,11 +15,11 @@ if __name__ == "__main__":
     
     # All methods use constant step size trick with alpha=0.1 (default)
     # Optimistic Greedy : Q_init = 5, epsilon = 0
-    _, _, rewardsOptimisticGreedy, p_optsOptimisticGreedy = zip(*[single_run(epsilon=0, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=5) for _ in range(n_runs)])
+    _, _, rewardsOptimisticGreedy, p_optsOptimisticGreedy = zip(*[single_run(horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=5, epsilon=0) for _ in range(n_runs)])
     # Realistic Eps-Greedy : Q_init = 0, epsilon = 0.1
-    _, _, rewardsRealisticEpsGreedy, p_optsRealisticEpsGreedy = zip(*[single_run(epsilon=0.1, horizon=horizon, estimation_method="exponential recency-weighted avg") for _ in range(n_runs)])
+    _, _, rewardsRealisticEpsGreedy, p_optsRealisticEpsGreedy = zip(*[single_run(horizon=horizon, estimation_method="exponential recency-weighted avg", epsilon=0.1) for _ in range(n_runs)])
     # Pessimistic Greedy (not in the book) : Q_init = -5, epsilon = 0
-    _, _, rewardsPessimisticGreedy, p_optsPessimisticGreedy = zip(*[single_run(epsilon=0, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=-5) for _ in range(n_runs)])
+    _, _, rewardsPessimisticGreedy, p_optsPessimisticGreedy = zip(*[single_run(horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=-5, epsilon=0) for _ in range(n_runs)])
     
     # Changing tuples of tuples into arrays
     arr_rewardsOptimisticGreedy = np.array(rewardsOptimisticGreedy)

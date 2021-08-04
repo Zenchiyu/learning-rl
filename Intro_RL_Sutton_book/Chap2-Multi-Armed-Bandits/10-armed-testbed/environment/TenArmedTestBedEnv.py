@@ -9,7 +9,7 @@ import numpy as np
 import copy
 
 class TenArmedTestBedEnv:
-    def __init__(self, horizon: int=1000, random_seed=None):
+    def __init__(self, horizon: int=1000, random_seed=None, loc: float=0):
         """
         Initialize the environment. Non associative setting, one single
         situation/state.
@@ -21,6 +21,10 @@ class TenArmedTestBedEnv:
             
         random_seed : TYPE, optional
             Random seed for all the episodes. The default is None.
+            
+        loc : float, optional
+            Specify that action values are generated according to a unit-variance
+            normal distribution centered around loc. The default is 0.
 
         Returns
         -------
@@ -33,9 +37,11 @@ class TenArmedTestBedEnv:
         self.horizon = horizon
         self.action_space = np.arange(10)
         
+        self.loc = loc
+        
         # initialize the ten reward distributions
         # create the true action values for the 10 actions
-        self.q_star = np.random.normal(size=(10, ))
+        self.q_star = np.random.normal(loc=self.loc, scale=1, size=(10, ))
         # reward distributions are normal distributions centered around
         # their q_star and with unit variance
         

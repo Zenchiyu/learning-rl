@@ -14,11 +14,11 @@ if __name__ == "__main__":
     n_runs = 2000
     
     # Greedy : epsilon = 0
-    q_starsGreedy, QsGreedy, rewardsGreedy, p_optsGreedy = zip(*[single_run(epsilon=0, horizon=horizon) for _ in range(n_runs)])
+    q_starsGreedy, QsGreedy, rewardsGreedy, p_optsGreedy = zip(*[single_run(horizon=horizon, epsilon=0) for _ in range(n_runs)])
     # Eps-Greedy : epsilon = 0.01
-    q_stars0dot01, Qs0dot01, rewards0dot01, p_opts0dot01 = zip(*[single_run(epsilon=0.01, horizon=horizon) for _ in range(n_runs)])
+    q_stars0dot01, Qs0dot01, rewards0dot01, p_opts0dot01 = zip(*[single_run(horizon=horizon, epsilon=0.01) for _ in range(n_runs)])
     # Eps-Greedy : epsilon = 0.1
-    q_stars0dot1, Qs0dot1, rewards0dot1, p_opts0dot1 = zip(*[single_run(epsilon=0.1, horizon=horizon) for _ in range(n_runs)])
+    q_stars0dot1, Qs0dot1, rewards0dot1, p_opts0dot1 = zip(*[single_run(horizon=horizon, epsilon=0.1) for _ in range(n_runs)])
     
     # Changing tuples of tuples into arrays
     arr_rewardsGreedy = np.array(rewardsGreedy)

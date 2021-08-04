@@ -2,7 +2,7 @@
 
 ---
 
-We try to replicate a suite of test problems called 10-armed Testbed from Sutton and Barto's book as well as the numerical experiments showing the effects of epsilon-greedy methods, optimistic initial values estimates and Upper-Confidence-Bound (UCB) action selection method.
+We try to replicate a suite of test problems called 10-armed Testbed from Sutton and Barto's book as well as the numerical experiments showing the effects of epsilon-greedy methods, optimistic initial values estimates and Upper-Confidence-Bound (UCB) action selection method. In this `README.md`, we only focus on action-value methods, methods that first estimate the values of the actions and then use them to pick actions. Gradient bandit algorithm is explained quickly in the `gradient_bandit.md` file.
 
 **Disclaimer:** My work is not necessarily free of mistakes. Please contact me if you see possible improvements so I can update the files.
 
