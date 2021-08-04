@@ -1,4 +1,4 @@
-# [Reinforcement Learning : An Introduction (second edition)](http://incompleteideas.net/book/RLbook2020.pdf)
+# [Reinforcement Learning : An Introduction (2nd edition)](http://incompleteideas.net/book/RLbook2020.pdf)
 
 We'll write "Replica" for the codes where we tried to replicate some figures. They can differ from the book. We only link to programming exercises below. Other exercises will be in pdf format.
 
@@ -19,7 +19,7 @@ My work is not necessarily free of mistakes. Please contact me if you see possib
 * [Figure 2.4: Average performance of UCB action selection on the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed#upper-confidence-bound)
 * [Figure 2.5: Average performance of the gradient bandit algorithm with and without a reward
 baseline on variant of the 10-armed testbed](https://github.com/Zenchiyu/learning-rl/blob/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed/gradient_bandit.md)
-* (Work In Progress) Figure 2.6: A parameter study of the various bandit algorithms presented in this chapter.
+* [Figure 2.6: A parameter study of the various bandit algorithms presented in this chapter.](https://github.com/Zenchiyu/learning-rl/blob/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/10-armed-testbed/parameter_study_stationary.md#parameter-study-for-stationary-case)
 
 ### Exercises
 * [Exercise 2.5: Experiment to demonstrate the
