@@ -7,18 +7,21 @@ methods from Sutton and Barto's book on 10 armed testbed with sample-averages
 methods.
 """
 from exploration_exploitation_functions import *
+from multiprocessing_functions import *
 
 if __name__ == "__main__":
-    np.random.seed(42)  # for reproducibility
+    np.random.seed(42)  # no reproducibility with parallel executions
     horizon = 1000
     n_runs = 2000
     
+    pool = init_pool()
+    
     # Greedy : epsilon = 0
-    q_starsGreedy, QsGreedy, rewardsGreedy, p_optsGreedy = zip(*[single_run(horizon=horizon, epsilon=0) for _ in range(n_runs)])
+    _, _, rewardsGreedy, p_optsGreedy = multiple_runs(pool, n_runs, horizon=horizon, epsilon=0)
     # Eps-Greedy : epsilon = 0.01
-    q_stars0dot01, Qs0dot01, rewards0dot01, p_opts0dot01 = zip(*[single_run(horizon=horizon, epsilon=0.01) for _ in range(n_runs)])
+    _, _, rewards0dot01, p_opts0dot01 = multiple_runs(pool, n_runs, horizon=horizon, epsilon=0.01)
     # Eps-Greedy : epsilon = 0.1
-    q_stars0dot1, Qs0dot1, rewards0dot1, p_opts0dot1 = zip(*[single_run(horizon=horizon, epsilon=0.1) for _ in range(n_runs)])
+    _, _, rewards0dot1, p_opts0dot1 = multiple_runs(pool, n_runs, horizon=horizon, epsilon=0.1)
     
     # Changing tuples of tuples into arrays
     arr_rewardsGreedy = np.array(rewardsGreedy)

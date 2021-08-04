@@ -7,19 +7,22 @@ from Sutton and Barto's book on 10 armed testbed with constant step size
 parameter (to keep the permanent bias).
 """
 from exploration_exploitation_functions import *
+from multiprocessing_functions import *
     
 if __name__ == "__main__":
-    np.random.seed(42)  # for reproducibility
+    np.random.seed(42)  # no reproducibility with parallel executions
     horizon = 1000
     n_runs = 2000
     
+    pool = init_pool()
+    
     # All methods use constant step size trick with alpha=0.1 (default)
     # Optimistic Greedy : Q_init = 5, epsilon = 0
-    _, _, rewardsOptimisticGreedy, p_optsOptimisticGreedy = zip(*[single_run(horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=5, epsilon=0) for _ in range(n_runs)])
+    _, _, rewardsOptimisticGreedy, p_optsOptimisticGreedy = multiple_runs(pool, n_runs, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=5, epsilon=0)
     # Realistic Eps-Greedy : Q_init = 0, epsilon = 0.1
-    _, _, rewardsRealisticEpsGreedy, p_optsRealisticEpsGreedy = zip(*[single_run(horizon=horizon, estimation_method="exponential recency-weighted avg", epsilon=0.1) for _ in range(n_runs)])
+    _, _, rewardsRealisticEpsGreedy, p_optsRealisticEpsGreedy = multiple_runs(pool, n_runs, horizon=horizon, estimation_method="exponential recency-weighted avg", epsilon=0.1)
     # Pessimistic Greedy (not in the book) : Q_init = -5, epsilon = 0
-    _, _, rewardsPessimisticGreedy, p_optsPessimisticGreedy = zip(*[single_run(horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=-5, epsilon=0) for _ in range(n_runs)])
+    _, _, rewardsPessimisticGreedy, p_optsPessimisticGreedy = multiple_runs(pool, n_runs, horizon=horizon, estimation_method="exponential recency-weighted avg", Q_init=-5, epsilon=0)
     
     # Changing tuples of tuples into arrays
     arr_rewardsOptimisticGreedy = np.array(rewardsOptimisticGreedy)
