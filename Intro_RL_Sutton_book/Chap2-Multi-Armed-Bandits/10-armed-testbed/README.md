@@ -4,8 +4,6 @@
 
 We try to replicate a suite of test problems called 10-armed Testbed from Sutton and Barto's book as well as the numerical experiments showing the effects of epsilon-greedy methods, optimistic initial values estimates and Upper-Confidence-Bound (UCB) action selection method. In this `README.md`, we only focus on action-value methods, methods that first estimate the values of the actions and then use them to pick actions. Gradient bandit algorithm is explained quickly in the `gradient_bandit.md` file.
 
-The figure 2.6 (p. 42) on a Parameter Study comparing the performance of action-value methods as well as gradient bandit on 10-armed Testbed is in the file `parameter_study_stationary.md`.
-
 **Disclaimer:** My work is not necessarily free of mistakes. Please contact me if you see possible improvements so I can update the files.
 
 
@@ -109,7 +107,7 @@ Upper-Confidence-Bound is non-parametric method based on the Hoeffding's inequal
 
 The main idea of UCB is selecting actions greedily not based only on the estimates but on the potential of the action being optimal. We apply an argmax on: the current estimates plus some uncertainty term : argmax a (Q(a) + U(a)). When we pick an action, U(a) decreases (we become a bit more certain about the potential of the action being optimal or not) and when we pick another action instead of a, U(a) increases. The logarithm term in the numerator of U(a) shows that the increase in uncertainty is less and less (but still unbounded) (the denominator grows faster (asymptotically) than the numerator if both grows at the same time).
 
-If we apply the formula blindly, we would be dividing by zero on actions that were never taken. The book explains that actions that were never taken before are maximizing actions (p. 36). Consequently, we include actions that were never taken before as maximizing actions (in the set prior to adding these actions, we had actions such that Q(a) + U(a) are maximal).
+If we apply the formula blindly, we would be dividing by zero on actions that were never taken. The book explains that actions that were never taken before are maximizing actions (p. 36). Consequently, we thought about including actions that were never taken before as maximizing actions in the set where we had already actions (with N(a) > 0) that maximized Q(a) + U(a) (before choosing a random action from the set). When we tried this, we didn't observe any spikes because with that method, we would not necessarily select all k actions in the k first steps.
 
 ### Average reward of  UCB versus epsilon-greedy
 
