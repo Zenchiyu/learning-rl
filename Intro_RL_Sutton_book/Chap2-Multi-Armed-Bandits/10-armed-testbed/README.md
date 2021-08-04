@@ -2,9 +2,9 @@
 
 
 
-We try to replicate a suite of test problems called 10-armed Testbed from Sutton and Barto's book as well as the numerical experiments showing the effects of epsilon-greedy methods, optimistic initial values estimates and Upper-Confidence-Bound (UCB) action selection method. In this `README.md`, we only focus on action-value methods, methods that first estimate the values of the actions and then use them to pick actions. Gradient bandit algorithm is explained quickly in the `gradient_bandit.md` file and the figure 2.6 (p. 32) : "A parameter study of the various bandit algorithms presented in this chapter.
-Each point is the average reward obtained over 1000 steps with a particular algorithm at a
-particular setting of its parameter." is in the file `parameter_study_stationary.md`.
+We try to replicate a suite of test problems called 10-armed Testbed from Sutton and Barto's book as well as the numerical experiments showing the effects of epsilon-greedy methods, optimistic initial values estimates and Upper-Confidence-Bound (UCB) action selection method. In this `README.md`, we only focus on action-value methods, methods that first estimate the values of the actions and then use them to pick actions. Gradient bandit algorithm is explained quickly in the `gradient_bandit.md` file.
+
+The figure 2.6 (p. 42) on a Parameter Study comparing the performance of action-value methods as well as gradient bandit on 10-armed Testbed is in the file `parameter_study_stationary.md`.
 
 **Disclaimer:** My work is not necessarily free of mistakes. Please contact me if you see possible improvements so I can update the files.
 
