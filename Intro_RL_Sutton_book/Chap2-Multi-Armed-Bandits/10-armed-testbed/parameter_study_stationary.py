@@ -71,12 +71,8 @@ if __name__ == "__main__":
                 avgs[key].append(np.mean(rewards))
             
         plt.plot(np.array(list(params_algo.values())).reshape(-1, ), avgs[key], label=key)
-
-    # sns.lineplot(x=xs, y=arr_rewardsUCB_c1.flatten())
-    # sns.lineplot(x=xs, y=arr_rewardsUCB_c2.flatten())
-    # sns.lineplot(x=xs, y=arr_rewards0dot1.flatten())
-    
-    plt.legend([r"UCB $c=1$", r"UCB $c=2$", r"$\epsilon=0.1$"])
-    plt.ylabel("Average reward")
-    plt.xlabel("Steps")
-    
+        
+    plt.legend()
+    plt.ylabel("Average reward over first 1000 time steps")
+    plt.xlabel("Param")
+    plt.xscale("log", base=2)
