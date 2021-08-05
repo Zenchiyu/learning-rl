@@ -224,4 +224,15 @@ If we know what case we face at each step, the best expected reward we can achie
 
 \paragraph{\textit{Exercise 2.11 (programming)} (p. 44)} Make a figure analogous to Figure $2.6$ (parameter study) for the nonstationary case outlined in \textbf{\textit{Exercise 2.5}}. Include the constant-step-size $\epsilon$-greedy algorithm with
 $\alpha=0.1$. Use runs of 200,000 steps and, as a performance measure for each algorithm and parameter setting, use the average reward over the last 100,000 steps.
+
+\bigskip
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{./non-stationary-testbed/images/avg_reward.png}
+\includegraphics[width=\textwidth]{./non-stationary-testbed/images/percent_optimal_action.png}
+\caption{Average performance of $\epsilon$-greedy action-value methods with different action-value estimates on a modified version of the 10-armed testbed with nonstationary reward distributions.
+These data are averages over $2000$ runs with different nonstationary bandit problems and with longer runs of $10000$ steps. All methods used $\epsilon=0.1$ and we compared the sample-average methods with the exponential recency-weighted average method for estimating values.}
+\end{figure}
+We can observe that the sample-average methods struggle to track the optimal action that can change over time compared to exponential recency-weighted average that gives more weight to recent rewards than old rewards. The code for the exercise can be found \href{https://github.com/Zenchiyu/learning-rl/tree/develop/Intro_RL_Sutton_book/Chap2-Multi-Armed-Bandits/non-stationary-testbed#non-stationary-testbed}{here}.
+
 \end{document}

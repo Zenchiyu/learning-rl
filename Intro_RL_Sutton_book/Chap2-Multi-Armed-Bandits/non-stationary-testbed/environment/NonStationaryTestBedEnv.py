@@ -8,7 +8,33 @@
 import numpy as np
 import copy
 
-class NonStationaryTestBedEnv:
+class MultiArmedBanditEnv:
+    """
+    Parent class for all Multi Armed Bandit Environment that are nonassociative.
+
+    This class only gives 0 as reward for all actions.
+    """
+    def __init__(self, horizon: int=1000, random_seed=None):
+        if isinstance(random_seed, int):
+            np.random.seed(random_seed)
+        
+        self.horizon = horizon
+        self.action_space = np.arange(10)
+        
+        self.reset()
+    
+    def reset(self):
+        self.q_star = np.zeros(self.action_space.shape)
+        self.t = 0
+        
+    def step(self, action: int):
+        self.t += 1
+        reward = 0
+        done = self.t == self.horizon
+        return reward, done
+
+
+class NonStationaryTestBedEnv(MultiArmedBanditEnv):
     def __init__(self, horizon: int=10000, random_seed=None):
         """
         Initialize the environment. Non associative setting, one single
@@ -28,15 +54,8 @@ class NonStationaryTestBedEnv:
         None.
 
         """
-        if isinstance(random_seed, int):
-            np.random.seed(random_seed)
-        
-        self.horizon = horizon
-        self.action_space = np.arange(10)
-        
-        # reset/init : tracking the time step and reset/init q_star
-        # q_star : initial true action values and changes over time
-        self.reset()
+        # Calls overloaded methods as well
+        super().__init__(horizon=horizon, random_seed=random_seed)
     
     def reset(self):
         # (re)initialize the ten reward distributions
@@ -45,6 +64,7 @@ class NonStationaryTestBedEnv:
         # reward distributions are normal distributions centered around
         # their q_star and with unit variance, q_star changes over time.
         
+        # track the time step
         self.t = 0
         
     def step(self, action: int):
@@ -73,7 +93,7 @@ class NonStationaryTestBedEnv:
         return np.random.normal(previous_q_star_a, 1), self.t == self.horizon
 
 if __name__ == "__main__":
-    env = NonStationaryTestBedEnv(random_seed=42)
+    env = NonStationaryTestBedEnv(horizon=5, random_seed=42)
    
     # One episode
     done = False
