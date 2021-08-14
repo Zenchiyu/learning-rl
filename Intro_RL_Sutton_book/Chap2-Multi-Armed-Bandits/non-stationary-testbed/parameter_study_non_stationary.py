@@ -58,7 +58,7 @@ if __name__ == "__main__":
               r"UCB, param=$c$": args_UCB,\
                   r"greedy with optimistic init. $\alpha=0.1$, param=$Q_1$": args_optimistic}
     
-    # Average reward obtained over 1000 steps with a particular algorithm at a
+    # Average reward obtained over 100000 steps with a particular algorithm at a
     # particular setting of its parameter
     avgs = {r"$\epsilon$-greedy, $\alpha_n(a)=\frac{1}{n}$, param=$\epsilon$": [],\
             r"$\epsilon$-greedy, $\epsilon=0.1$, param=$\alpha_n(a)=\alpha$": [],\
@@ -80,14 +80,11 @@ if __name__ == "__main__":
                 else:
                     _, _, rewards, p_opts = multiple_runs(pool, n_runs, env=env, horizon=horizon, **param)
                     
-                # Compute average of the 1000 steps
-                # avg_rewards = np.mean(np.array(rewards), axis=0)
-                # avg_p_opts = np.mean(np.array(p_opts), axis=0)
                 avgs[key].append(np.mean(rewards))
             
         plt.plot(np.array(list(params_algo.values())).reshape(-1, ), avgs[key], label=key)
         
     plt.legend()
-    plt.ylabel("Average reward over first 1000 time steps")
+    plt.ylabel("Average reward over first 100000 time steps")
     plt.xlabel("Param")
     plt.xscale("log", base=2)
