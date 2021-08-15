@@ -29,8 +29,28 @@
 
 Some keywords, citations and formulas.
 
-\paragraph{Particularities of the value functions} When we do not want to select actions based on the knowledge of the environment dynamics, action-value functions can be used because they "cache the results of all
-one-step-ahead searches." (Upper part of the page $65$).
+\paragraph{What are value functions ?}
+Value functions tell us \textit{how good} it is for the agent to be in a given state or how good it is for the agent to take an action from a given state. "How good" is related to the expected return, the expected cumulative future reward when the agent follows a particular behaviour, a policy.
+
+For example, the optimal action-value function $q_*(s, a)$ is telling us what is the expected return if we start in state $s$, take action $a$ then follows the optimal policy/strategy $\pi_*$ afterwards.
+
+Here are the formal definitions of the value functions under policy $\pi$; the first one is for the state-value function and the second is the action-value function.
+\begin{equation}
+v_\pi(s) \doteq \mathbb{E}_\pi[G_t \lvert S_t = s]
+\end{equation}
+
+\begin{equation}
+q_\pi(s, a) \doteq \mathbb{E}_\pi[G_t \lvert S_t = s, A_t = a]
+\end{equation}
+
+with $G_t = R_{t+1} + \gamma G_{t+1}, \forall t < T$ and $G_T = 0$. The discount factor/rate $\gamma$ is a scalar value in $[0, 1]$ that determines how farsighted is the agent. Is the agent taking into account more than the immediate reward for deciding which action to pick in a given state ?
+
+The undiscounted case ($\gamma=1$) is used most of the time for episodic tasks where there's a notion of a terminal state or final time step $T$ (random variable). It can be used for continuing tasks but it's not covered in the Chapter so we can just keep in mind that the discounted case ($0 \leq \gamma < 1$) is used for continuing tasks to keep the return finite.
+
+The value of the \textit{terminal state} (or \textit{absorbing state}. There's only one single terminal state with different possible rewards for different outcomes.) for the \textit{episodic tasks} is $0$.
+
+\paragraph{Action-value function and Model-free} When we do not want to select actions based on the knowledge of the environment dynamics, action-value functions can be used because they "cache the results of all
+one-step-ahead searches." (Upper part of the page $65$). In other words, action-value functions are used in the \textit{model-free} case where methods select actions without creating a model of the environment--without estimating the transition probabilities as well as the expected rewards based on real trajectories.
 
 \paragraph{Bellman (expectation) equations for the four value functions}
 
@@ -56,5 +76,30 @@ q_*(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \max_{a'} q_*(s',
 
 
 where $a \in \mathcal{A}(s)$, $s'$ and $s \in \mathcal{S}$ and $r \in \mathcal{R}$
+
+\section{Citations of some parts of the book}
+
+\begin{enumerate}
+\item p. $49$: "In a Markov decision process, the probabilities given by $p$ completely characterize the \textbf{environment's dynamics}. [...] The state must include \textit{information about all aspects of the past} agent–environment interaction that make a \textit{difference for the future}. If it
+does, then the state is said to have the \textbf{Markov property}. We will assume the Markov
+property throughout this book, though starting in Part II we will consider \textbf{approximation
+methods} that do not rely on it, and in Chapter 17 we consider how a \textbf{Markov state} can
+be efficiently \textbf{learned} and \textbf{constructed from non-Markov observations}."
+
+\item p. $50$: "In general, \textit{actions can be any decisions we want to learn how to make}, and
+states can be anything we can know that might be useful in making them."
+\item p. $50$: "The general rule we follow is that \textbf{anything that cannot be changed arbitrarily} by
+the agent is considered to be outside of it and thus \textbf{part of its environment}."
+\item p. $50$: "The agent-environment \textbf{boundary} represents the limit of the
+agent's \textbf{absolute control, not of its knowledge}."
+\item p. $53$, \textit{reward hypothesis} : "That all of what we mean by \textbf{goals} and purposes can be well thought of as
+the \textbf{maximization of the expected value} of the cumulative \textbf{sum} of a received
+scalar signal (called \textbf{reward})."
+
+\item p. $68$: "The \textbf{online nature} of reinforcement learning makes it possible to \textbf{approximate optimal policies} in ways that put more effort into learning to make \textit{good decisions} for
+\textbf{frequently encountered states}, at the expense of less effort for infrequently encountered
+states. This is one key property that distinguishes reinforcement learning from other
+approaches to approximately solving MDPs."
+\end{enumerate}
 
 \end{document}

@@ -68,22 +68,88 @@ where $s'$ can be the terminal state.
 
 \paragraph{\textit{Exercise 3.6} (p. 56)} Suppose you treated pole-balancing as an episodic task but also used discounting, with all rewards zero except for $-1$ upon failure. What then would the return be at each time? How does this return differ from that in the discounted, continuing formulation of this task?
 
+\bigskip
+The return for the discounted, \textit{episodic} formulation would be at each time
+\begin{equation}
+\begin{split}
+G_t &\doteq R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \hdots + \gamma^{T-1} R_T\\
+&= -\gamma^{T-1}
+\end{split}
+\end{equation}
+while the return for the discounted, \textit{continuing} formulation would be at each time
+\begin{equation}
+\begin{split}
+G_t &\doteq \sum_{k=0}^\infty \gamma^k R_{t+k+1} = - \sum_{k=0}^\infty \gamma^k \textbf{1}_{\textrm{failure}}
+\end{split}
+\end{equation}
+
 \paragraph{\textit{Exercise 3.7} (p. 56)} Imagine that you are designing a robot to run a maze. You decide to give it a reward of $+1$ for escaping from the maze and a reward of zero at all other times. The task seems to break down naturally into episodes---the successive runs through the maze---so
 you decide to treat it as an episodic task, where the goal is to maximize expected total reward ($3.7$). After running the learning agent for a while, you find that it is showing no improvement in escaping from the maze. What is going wrong? Have you effectively communicated to the agent what you want it to achieve?
+
+\bigskip
+We can just recall that the return $G_t$ from ($3.7$) (for episodic tasks) is just the sum of the future rewards.
+\begin{equation}
+G_t \doteq R_{t+1} + R_{t+2} + R_{t+3} + \hdots + R_T
+\end{equation}
+
+Because of how we defined the rewards and because we use the undiscounted formulation of the return, $G_t$ is either $1$ or $0$ (if a game can terminate without escape from the maze) and what we try to maximize is the expected amount of games where we escape from the maze. For a given state, its value (not estimation) would be the average amount of future games where we will escape if we follow some policy.
+
+%If we suppose that the exit is reachable from any state, then the values of all states (not estimations) could be the same at each time step.
+\textbf{Work In Progress}
 
 \paragraph{\textit{Exercise 3.8} (p. 56)} Suppose $\gamma = 0.5$ and the following sequence of rewards is received $R_1 = -1,
 R_2 = 2, R_3 = 6, R_4 = 3$, and $R_5 = 2$, with $T = 5$. What are $G_0, G_1, \hdots, G_5$? Hint:
 Work backwards.
 
+\bigskip
+\begin{itemize}
+\item $G_5=0$
+\item $G_4=R_5 + \gamma \cdot G_5 = 2 + 0.5 \cdot 0 = 2$
+\item $G_3=R_4 + \gamma \cdot G_4 = 3 + 0.5 \cdot 2 = 4$
+\item $G_2=R_3 + \gamma \cdot G_3 = 6 + 0.5 \cdot 4 = 8$
+\item $G_1=R_2 + \gamma \cdot G_2 = 2 + 0.5 \cdot 8 = 6$
+\item $G_0=R_1 + \gamma \cdot G_1 = -1 + 0.5 \cdot 6 = 2$
+\end{itemize}
+
 \paragraph{\textit{Exercise 3.9} (p. 56)} Suppose $\gamma = 0.9$ and the reward sequence is $R_1 = 2$ followed by an infinite sequence of $7$s. What are $G_1$ and $G_0$?
+
+\bigskip
+Instead of having an episodic task as the previous exercise, we use the discounted, continuing formulation of the return
+\begin{equation}
+G_t \doteq \sum_{k=0}^\infty \gamma^k R_{t+k+1}
+\end{equation}
+
+$G_1$ is directly given by
+\begin{equation}
+G_1 \doteq \sum_{k=0}^\infty \gamma^k R_{k+2} = 7 \sum_{k=0}^\infty \gamma^k = 7 \cdot \frac{1}{1-\gamma} = 70
+\end{equation}
+
+and $G_0 = R_1 + \gamma \cdot G_1 = 2 + 0.9 \cdot 70 = 65$
+
 \paragraph{\textit{Exercise 3.10} (p. 56)} Prove the second equality in ($3.10$).
+
+\bigskip
+We want to prove that if the rewards at all time steps are constant $+1$, then the return is $\frac{1}{1-\gamma} < \infty$ for $0 \leq \gamma < 1$
+\begin{equation}
+G_t =\sum_{k=0}^\infty \gamma^k = \frac{1}{1-\gamma}
+\end{equation}
+
+We first pass the $1-\gamma$ on the other side and do some manipulations to complete the proof
+\begin{equation}
+(1-\gamma) \sum_{k=0}^\infty \gamma^k = 1 \iff \sum_{k=0}^\infty \gamma^k - \sum_{k=1}^\infty \gamma^{k} = \gamma^0 + 0 = 1
+\end{equation}
 
 \paragraph{\textit{Exercise 3.11} (p. 58)} If the current state is $S_t$, and actions are selected according to a stochastic
 policy $\pi$, then what is the expectation of $R_{t+1}$ in terms of $\pi$ and the four-argument dynamics function $p$ ($3.2$)?
 
 \paragraph{\textit{Exercise 3.12} (p. 58)} Give an equation for $v_\pi$ in terms of $q_\pi$ and $\pi$.
 
+\bigskip
+
 \paragraph{\textit{Exercise 3.13} (p. 58)} Give an equation for $q_\pi$ in terms of $v_\pi$ and the four-argument $p$.
+
+\bigskip
+
 
 \paragraph{\textit{Exercise 3.14} (p. 60)} The Bellman equation ($3.14$) must hold for each state for the value function $v_\pi$ shown in Figure $3.2$ (right) of Example $3.5$ (Gridworld). Show numerically that this equation holds for the center state, valued at $+0.7$, with respect to its four neighboring states, valued at
 $+2.3, +0.4, -0.4$, and $+0.7$. (These numbers are accurate only to one decimal place.)
