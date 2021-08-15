@@ -1,0 +1,60 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows,shapes,automata,positioning,calc}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+
+\title{Chapter 3 - Finite Markov Decision Processes}
+\author{Stéphane Liem NGUYEN}
+\begin{document}
+\maketitle
+
+Some keywords, citations and formulas.
+
+\paragraph{Particularities of the value functions} When we do not want to select actions based on the knowledge of the environment dynamics, action-value functions can be used because they "cache the results of all
+one-step-ahead searches." (Upper part of the page $65$).
+
+\paragraph{Bellman (expectation) equations for the four value functions}
+
+Bellman equation for the state-value function for policy $\pi$
+\begin{equation}
+v_\pi(s) = \sum_{a} \pi(a \lvert s) \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_\pi(s')\right]
+\end{equation}
+
+Bellman equation for the optimal state-value function (Bellman optimal equation for $v_*$)
+\begin{equation}
+v_*(s) = \max_{a} \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_*(s')\right]
+\end{equation}
+
+Bellman equation for the action-value function for policy $\pi$
+\begin{equation}
+q_\pi(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \sum_{a'} \pi(a' \lvert s') q_\pi(s', a')\right]
+\end{equation}
+
+Bellman equation for the optimal action-value function (Bellman optimal equation for $q_*$)
+\begin{equation}
+q_*(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \max_{a'} q_*(s', a')\right]
+\end{equation}
+
+
+where $a \in \mathcal{A}(s)$, $s'$ and $s \in \mathcal{S}$ and $r \in \mathcal{R}$
+
+\end{document}

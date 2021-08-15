@@ -22,6 +22,9 @@
     pdfpagemode=FullScreen,
     }
 
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
 \title{Chapter 3 - Finite Markov Decision Processes}
 \author{Stéphane Liem NGUYEN}
 \begin{document}
@@ -47,6 +50,21 @@ fundamental reason for preferring one location over another, or is it a free cho
 \paragraph{\textit{Exercise 3.4} (p. 53)} Give a table analogous to that in Example $3.3$ (recycling robot), but for $p(s', r \lvert s, a)$. It should have columns for $s, a, s', r$, and $p(s', r|s, a)$, and a row for every $4$-tuple for which $p(s', r \lvert s, a) > 0$.
 
 \paragraph{\textit{Exercise 3.5} (p. 55)} The equations in Section $3.1$ (Agent-Environment Interface) are for the continuing case and need to be modified (very slightly) to apply to episodic tasks. Show that you know the modifications needed by giving the modified version of ($3.3$).
+
+\bigskip
+Based on the book at page $54$: "Episodes can all be considered to
+end in the same terminal state, with different rewards for the different outcomes. [...] In episodic tasks we sometimes need
+to distinguish the set of all nonterminal states, denoted $\mathcal{S}$, from the set of all states plus the terminal state, denoted $\mathcal{S}^+$.", we can just add the terminal state to set of possible next states.
+
+We can rewrite the modified version of ($3.3$) as follows:
+
+\begin{equation}
+\sum_{s' \in \mathcal{S}^{\color{red}+\color{black}}} \sum_{r \in \mathcal{R}} p(s', r | s, a) = 1,\quad \forall s \in \mathcal{S}, \forall a \in \mathcal{A}(s)
+\end{equation}
+
+where $s'$ can be the terminal state.
+
+
 
 \paragraph{\textit{Exercise 3.6} (p. 56)} Suppose you treated pole-balancing as an episodic task but also used discounting, with all rewards zero except for $-1$ upon failure. What then would the return be at each time? How does this return differ from that in the discounted, continuing formulation of this task?
 
@@ -216,7 +234,7 @@ Consider the continuing MDP shown in Figure \ref{mdp_transition_graph}. The only
 $\pi_\textrm{left}$ and $\pi_\textrm{right}$. What policy is optimal if $\gamma = 0$? If $\gamma = 0.9$?
 If $\gamma = 0.5$?
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \begin{tikzpicture}[
 >=latex, thick ,bend angle=90,
@@ -256,15 +274,135 @@ action-node/.style = {circle,fill=black, radius=2.5mm, minimum size=2.5mm}
 
 \paragraph{\textit{Exercise 3.24} (p. 67)} Figure $3.5$ (Gridworld) gives the optimal value of the best state of the gridworld as $24.4$, to one decimal place. Use your knowledge of the optimal policy and ($3.8$) to express this value symbolically, and then to compute it to three decimal places.
 
+\clearpage
 \paragraph{\textit{Exercise 3.25} (p. 67)} Give an equation for $v_*$ in terms of $q_*$.
+
+\bigskip
+From page $63$ of the book, "Intuitively, the Bellman optimality equation expresses the
+fact that the value of a state under an optimal policy must equal the expected return for
+the best action from that state"
+
+\begin{equation}
+v_*(s) = \sum_{a} \pi(a \lvert s) q_*(s, a) = \max_{a} q_*(s, a)
+\end{equation}
+
+where $a \in \mathcal{A}(s)$
 
 \paragraph{\textit{Exercise 3.26} (p. 67)} Give an equation for $q_*$ in terms of $v_*$ and the four-argument $p$.
 
+\bigskip
+\begin{equation}
+q_*(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_*(s')\right]
+\end{equation}
+
 \paragraph{\textit{Exercise 3.27} (p. 67)} Give an equation for $\pi_*$ in terms of $q_*$.
+
+\bigskip
+
+From page $68$ of the book, "Any policy that is greedy with respect to the optimal value functions must be an optimal
+policy." and from page $65$, "With $q_*$ the agent does not
+even have to do a one-step-ahead search: for any state $s$, it can simply find any action
+that maximizes $q_*(s, a)$", translating it into a formula gives us one possible optimal value function:
+
+\begin{equation}
+\pi_*(a \lvert s) = \begin{cases} 1 & \textrm{if } a = \argmax\limits_{a'} q_*(s, a')\\ 0 & \textrm{else}\end{cases}
+\end{equation}
+
+if we suppose that the argmax gives one of the maximizing actions if many actions achieve the maximum.
 
 \paragraph{\textit{Exercise 3.28} (p. 67)} Give an equation for $\pi_*$ in terms of $v_*$ and the four-argument $p$.
 
+\bigskip
+By using the previous exercise and Exercise $3.26$ where
+\begin{equation}
+q_*(s, a') = \sum_{s', r} p(s', r \lvert s, a') \left[r + \gamma v_*(s')\right]
+\end{equation}
+
+we get
+
+\begin{equation}
+\pi_*(a \lvert s) = \begin{cases} 1 & \textrm{if } a = \argmax\limits_{a'} \sum_{s', r} p(s', r \lvert s, a') \left[r + \gamma v_*(s')\right] \\ 0 & \textrm{else}\end{cases}
+\end{equation}
+
 \paragraph{\textit{Exercise 3.29} (p. 67)} Rewrite the four Bellman equations for the four value functions ($v_\pi$, $v_*$, $q_\pi$,
-and $q_*$) in terms of the three argument function $p$ (3.4) and the two-argument function $r$
+and $q_*$) in terms of the three argument function $p$ ($3.4$) and the two-argument function $r$
 ($3.5$).
+
+\bigskip
+Let's just first recall how to obtain the three argument function $p$ and the two-argument function $r$ from the $4$ argument function $p$ describing the MDP dynamics:
+
+\begin{equation}
+p(s' \lvert s, a) \doteq \sum_{r \in \mathcal{R}} p(s', r \lvert s, a)
+\end{equation}
+
+\begin{equation}
+r(s, a) \doteq \mathbb{E}[R_{t+1} \lvert S_t = s, A_t= a] = \sum_{r \in \mathcal{R}} r \cdot p(r \lvert s, a) = \sum_{r \in \mathcal{R}} r \sum_{s' \in \mathcal{S}} p(s', r \lvert s, a)
+\end{equation}
+
+We can also recall the $4$ Bellman equations for the four value functions:
+\begin{equation}
+v_\pi(s) = \sum_{a} \pi(a \lvert s) \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_\pi(s')\right]
+\end{equation}
+
+\begin{equation}
+v_*(s) = \max_{a} \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_*(s')\right]
+\end{equation}
+
+\begin{equation}
+q_\pi(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \sum_{a'} \pi(a' \lvert s') q_\pi(s', a')\right]
+\end{equation}
+
+\begin{equation}
+q_*(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \max_{a'} q_*(s', a')\right]
+\end{equation}
+
+
+where $a \in \mathcal{A}(s)$, $s'$ and $s \in \mathcal{S}$ and $r \in \mathcal{R}$. By replacing all the $4$ Bellman equations with ($3.4$) and ($3.5$) from the book:
+
+\begin{equation}
+v_\pi(s) = \sum_{a} \pi(a \lvert s) \left[ r(s, a) + \gamma \sum_{s'} p(s' \lvert s, a) v_\pi(s')\right]
+\end{equation}
+
+\begin{equation}
+v_*(s) = \max_{a} \left\{ r(s, a) + \gamma \sum_{s'} p(s' \lvert s, a) v_*(s') \right\}
+\end{equation}
+
+
+\begin{equation}
+q_\pi(s, a) = r(s, a) + \gamma \sum_{s'} p(s' \lvert s, a) \sum_{a'} \pi(a' \lvert s') q_\pi(s', a')
+\end{equation}
+
+\begin{equation}
+q_*(s, a) = r(s, a) + \gamma \sum_{s'} p(s' \lvert s, a) \max_{a'} q_*(s', a')
+\end{equation}
+
+As remark, the Bellman equation with two-argument function $r$ and three-argument  function $p$ could be used directly to obtain the last equality for $v_*(\textrm{\textbf{h}})$ or the equation for $v_*(\textrm{\textbf{l}})$ in Example $3.9$ on the Bellman Optimality Equation for Recycling Robot (p. 65).
+
+\paragraph{Proof of the formula used in the first equality of Example $3.9$ Bellman Optimality Equation for Recycling Robot (p. 65)}
+
+We want to prove that 
+\begin{equation}
+v_*(s) = \max_{a} \sum_{s'} p(s' \lvert s, a) \left[r(s, a, s') + \gamma v_*(s')\right]
+\end{equation}
+
+Recall the definition of $r(s, a, s')$ that is the expected reward for state--action--next-state triples (($3.6$) in the book at page $49$)
+\begin{equation}
+\begin{split}
+r(s, a, s') \doteq \mathbb{E}[R_{t+1} \lvert S_t = s, A_t = a, S_{t+1} = s'] &= \sum_{r \in \mathcal{R}} r \cdot p(r \lvert s, a, s')\\
+&= \sum_{r \in \mathcal{R}} r \cdot \frac{p(s', r \lvert s, a)}{p(s' \lvert s, a)}
+\end{split}
+\end{equation}
+
+And this gives us $\sum_{s'} p(s' \lvert s, a) \cdot r(s, a, s') = \sum_{s', r} r \cdot p(s', r \lvert s, a)$ and we substitute it in the Bellman equation for $v_*$.
+
+\begin{equation}
+\begin{split}
+v_*(s) &= \max_{a} \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_*(s')\right]\\
+&=\max_{a}\left\{\sum_{s'} p(s' \lvert s, a) \cdot r(s, a, s') + \gamma \sum_{s', r} p(s', r \lvert s, a) v_*(s')\right\}\\
+&= \max_{a} \sum_{s'} p(s' \lvert s, a) \left[r(s, a, s') + \gamma v_*(s')\right]
+\end{split}
+\end{equation}
+
+This proves the formula.
+
 \end{document}
