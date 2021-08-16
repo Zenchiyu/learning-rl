@@ -124,7 +124,9 @@ $G_1$ is directly given by
 G_1 \doteq \sum_{k=0}^\infty \gamma^k R_{k+2} = 7 \sum_{k=0}^\infty \gamma^k = 7 \cdot \frac{1}{1-\gamma} = 70
 \end{equation}
 
-by using ($3.10$) from the book and $G_0 = R_1 + \gamma \cdot G_1 = 2 + 0.9 \cdot 70 = 65$.
+by using ($3.10$) from the book.
+
+Finally, $G_0 = R_1 + \gamma \cdot G_1 = 2 + 0.9 \cdot 70 = 65$.
 
 
 \paragraph{\textit{Exercise 3.10} (p. 56)} Prove the second equality in ($3.10$).
@@ -174,6 +176,24 @@ q_\pi(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_\pi(s') \righ
 \paragraph{\textit{Exercise 3.14} (p. 60)} The Bellman equation ($3.14$) must hold for each state for the value function $v_\pi$ shown in Figure $3.2$ (right) of Example $3.5$ (Gridworld). Show numerically that this equation holds for the center state, valued at $+0.7$, with respect to its four neighboring states, valued at
 $+2.3, +0.4, -0.4$, and $+0.7$. (These numbers are accurate only to one decimal place.)
 
+\bigskip
+Let's recall the Bellman expectation equation for the state-value function $v_\pi$
+\begin{equation}
+v_\pi(s) = \sum_{a} \pi(a \lvert s) \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_\pi(s')\right]
+\end{equation}
+
+and that the example used a discount rate/factor $\gamma$ of $0.9$. We also have to recall that the policy $\pi$ is an equiprobable random one and that the agent transitions deterministically to a future state and get deterministically a reward of $0$, $-1$, $10$ or $5$.
+
+We can now show numerically that the equation holds for the center state:
+\begin{equation}
+\begin{split}
+0.25 \cdot [0.9 \cdot 2.3] + 0.25 \cdot [0.9 \cdot 0.4] + 0.25 \cdot [0.9 \cdot -0.4] + 0.25 \cdot [0.9 \cdot 0.7] &= 9/40 \cdot 3\\
+&= 0.675\\
+&\approx 0.7
+\end{split}
+\end{equation}
+because all the immediate rewards were $0$.
+
 \paragraph{\textit{Exercise 3.15} (p. 61)} In the gridworld example, rewards are positive for goals, negative for running into the edge of the world, and zero the rest of the time. Are the signs of these rewards important, or only the intervals between them? Prove, using ($3.8$), that adding a
 constant $c$ to all the rewards adds a constant, $v_c$, to the values of all states, and thus does not affect the relative values of any states under any policies. What is $v_c$ in terms of $c$ and $\gamma$?
 
@@ -182,12 +202,12 @@ We can first note that the gridworld example is a continuing task. For continuin
 
 \bigskip
 Let's denote $\hat{G}_t$ the new return after shifting all the rewards by $c$ and $G_t$ the return before shifting. We can show the relation between $G_t$ and $\hat{G}_t$
-\begin{equation}\label{shift_return}
+\begin{equation}\label{eq_continuing_shift_return}
 \hat{G}_t \doteq \sum_{k=0}^\infty \gamma^k (c + R_{t+k+1}) = G_t + \frac{c}{1-\gamma} = G_t + v_c
 \end{equation}
 where $v_c = \frac{c}{1-\gamma}$ and the second equality comes from the definition of the return for the discounted continuing case and from the ($3.10$) of the book. 
 
-As direct consequence of the equation \ref{shift_return}, the values of all states $\hat{v}_\pi$ after shifting the rewards by $c$ can be written as:
+As direct consequence of the equation \ref{eq_continuing_shift_return}, the values of all states $\hat{v}_\pi$ after shifting the rewards by $c$ can be written as:
 \begin{equation}
 \begin{split}
 \hat{v}_\pi(s) &\doteq \mathbb{E}_\pi[\hat{G}_t \lvert S_t = s]\\
@@ -202,35 +222,22 @@ We can then conclude that the goal of the agent is left unchanged, the maximizat
 
 \bigskip
 If we add a constant $c$ to all the rewards in an episodic task, the task will change because the new return depends on the final time step $T$. If we take the same notations as the previous exercise, we get
-\begin{equation}
-\hat{G}_t \doteq \sum_{k=1}^T (c + R_k) = G_t + c \cdot T = G_t + f_c(T)
+\begin{equation}\label{eq_episodic_shift_return}
+\hat{G}_t \doteq \sum_{k=t+1}^T (c + R_k) = G_t + c \cdot (T - t) = G_t + f_c(T)
 \end{equation}
-where now the new return depends on a function of $T$; $f_c(T) = c \cdot T$ that is not a constant.
+where now the new return depends on a function of $T$; $f_c(T) = c \cdot (T - t)$ that is not anymore a constant.
 
 As effect on the state values, we have that
-\begin{equation}
+\begin{equation}\label{eq_episodic_shift_return_state_values}
 \begin{split}
 \hat{v}_\pi(s) &\doteq \mathbb{E}_\pi[\hat{G}_t \lvert S_t = s]\\
-&= \mathbb{E}_\pi[ G_t + c \cdot T \lvert S_t = s] = v_\pi(s) + c \cdot \mathbb{E}_\pi[T \lvert S_t = s]
+&= \mathbb{E}_\pi[ G_t + c \cdot (T - t) \lvert S_t = s] = v_\pi(s) + c \cdot \mathbb{E}_\pi[(T - t) \lvert S_t = s]
 \end{split}
 \end{equation}
 
-where $c \cdot \mathbb{E}_\pi[T \lvert S_t = s]$ can be bigger or lower (depending on the value of $c$) in states where $T$ is in average big.
+where $c \cdot \mathbb{E}_\pi[T - t \lvert S_t = s]$ can be positive or negative (depending on the value of $c$). By adding that constant $c$, maximizing the new expected total reward is different from maximizing the old expected total reward.
 
-We also have as relation between the expected final time step and the current time step plus the expected remaining amount of steps until the final step that 
-\begin{equation}\label{eq_expected_final_time_step}
-\mathbb{E}_\pi[T \lvert S_t = s] = \mathbb{E}_\pi[T - t + t \lvert S_t = s] = t + \mathbb{E}_\pi[T - t \lvert S_t = s]
-\end{equation}
-
-As example in maze running, if we suppose that $R_k = -1$ at each time step $k$ and $c = 1$ then by using equation \ref{eq_expected_final_time_step}, we can rewrite the new values of the states as
-\begin{equation}
-\begin{split}
-\hat{v}_\pi(s) &= v_\pi(s) + c \cdot \mathbb{E}_\pi[T \lvert S_t = s]\\
-&= v_\pi(s) + t + \mathbb{E}_\pi[T - t \lvert S_t = s] = t
-\end{split}
-\end{equation}
-
-because $\mathbb{E}_\pi[T - t \lvert S_t = s] = -v_\pi(s)$. The equation explains that the goal of the new task is to 
+As example in maze running, if we suppose that $R_k = -1$ at each time step $k$ and $c = 1$ then the new values of all states would be $0$ based on equation \ref{eq_episodic_shift_return} and the goal would not even exist anymore. The old state value function is cancelled by the expected number of time steps left in equation \ref{eq_episodic_shift_return_state_values}.
 
 
 \clearpage
@@ -328,7 +335,17 @@ action-node/.style = {circle,fill=black, radius=2.5mm, minimum size=2.5mm}
 Give the equation corresponding to this intuition and diagram for the value at the root node, $v_\pi(s)$, in terms of the value at the expected leaf node, $q_\pi(s, a)$, given $S_t = s$. This equation should include an expectation conditioned on following the policy, $\pi$. Then give
 a second equation in which the expected value is written out explicitly in terms of $\pi(a|s)$ such that no expected value notation appears in the equation.
 
-\clearpage
+\bigskip
+\begin{equation}
+\begin{split}
+v_\pi(s) &\doteq \mathbb{E}_\pi[G_t \lvert S_t = s] = \mathbb{E}_\pi\left[\mathbb{E}_\pi[G_t \lvert S_t, A_t] \lvert S_t = s\right]\\
+&= \mathbb{E}_\pi[q_\pi(S_t, A_t) \lvert S_t = s]\\
+&= \sum_{a} \pi(a \lvert s) q_\pi(s, a)
+\end{split}
+\end{equation}
+
+by using the Law of iterated expectations.
+
 \paragraph{\textit{Exercise 3.19} (p. 62)} The value of an action, $q_\pi(s, a)$, depends on the expected next reward and
 the expected sum of the remaining rewards. Again we can think of this in terms of a
 small backup diagram, this one rooted at an action (state-action pair) and branching to
@@ -367,16 +384,50 @@ action-node/.style = {circle,fill=black, radius=2.5mm, minimum size=2.5mm}
 \end{figure}
 
 
-Give the equation corresponding to this intuition and diagram for the action value, $q_\pi(s, a)$, in terms of the expected next reward, $R_{t+1}$, and the expected next state value, $v_\pi(St+1)$, given that $S_t=s$ and $A_t=a$. This equation should include an expectation but
+Give the equation corresponding to this intuition and diagram for the action value, $q_\pi(s, a)$, in terms of the expected next reward, $R_{t+1}$, and the expected next state value, $v_\pi(S_{t+1})$, given that $S_t=s$ and $A_t=a$. This equation should include an expectation but
 \textit{not} one conditioned on following the policy.
 Then give a second equation, writing out the expected value explicitly in terms of $p(s', r \lvert s, a)$ defined by ($3.2$), such that no expected value notation appears in the equation.
+
+\bigskip
+\begin{equation}
+\begin{split}
+q_\pi(s, a) &\doteq \mathbb{E}_\pi[G_t \lvert S_t = s, A_t = a] \\
+&= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1} \lvert S_t = s, A_t = a]]\\
+&= \mathbb{E}[R_{t+1} + \gamma v_\pi(S_{t+1}) \lvert S_t = s, A_t = a]]\\
+&= \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_\pi(s') \right]
+\end{split}
+\end{equation}
+
 
 \paragraph{\textit{Exercise 3.20} (p. 66)} 
 Draw or describe the optimal state-value function for the golf example.
 
+\bigskip
+The optimal state-value function for the golf example tells us the negative of
+the number of strokes to the hole from a given state if actions are selected optimally.
+
+%Let's first determine the regions for the optimal state-value before their values.
+
+By using the information from the Figure $3.3$ in the book, we know that the first stroke with the driver will move the ball in the $-2$ region from the contour plot of $q_*(s, \textrm{\textbf{driver}})$ while the putter only moves to the $-5$ region for the upper part of the figure. We must only keep in the mind the difference of the values between neighbouring regions from the upper part of the figure because the values of the states are not based on the optimal policy. Based on "Intuitively, the Bellman optimality equation expresses the
+fact that the value of a state under an optimal policy must equal the expected return for
+the best action from that state" from page $63$ and the previous remarks, the first region is the same (as well as its value) as for the contour plot of $q_*(s, \textrm{\textbf{driver}})$ (the optimal first action from the tee is by using the driver).
+
+The first region has then a value of $-3$ indicating that the optimal strategy is to perform $3$ actions from the tee to the hole. By comparing again the contour plot of both value functions, it is not optimal to use the putter from the $-2$ region of the lower graph because even if the best we can obtain from that region is if the first action with the driver from the tee threw the ball in the green area, the first action with the driver has the risk of throwing the ball in the sand traps. If the ball falls in the sand traps, the putter is useless to get the ball out of them. The second optimal action is then to use again the driver and the region we keep for the optimal state-value function is the same as for the optimal action-value function $q_*(s, \textrm{\textbf{driver}})$ with value $-2$.
+
+The last region is again the same.
+
+\textbf{Work In Progress}
+
 \paragraph{\textit{Exercise 3.21} (p. 66)} 
 Draw or describe the contours of the optimal action-value function for
 putting, $q_*(s, \textrm{\textbf{putter}})$, for the golf example.
+
+\bigskip
+The optimal action-value function for putting, $q_*(s, \textrm{\textbf{putter}})$, shows the expected return if we first use the putter from the state $s$ then use optimal actions afterwards. More precisely, it's the negative of the number of strokes to the hole if we first use the putter from the state $s$ then select actions optimally afterwards by following $\pi_*$.
+
+Based on the upper part of the Figure $3.3$ in the book that shows the state-value function for the policy that always use the putter, we know that if we use the putter from some region, we will always arrive deterministically after a stroke, in the next region that has one integer higher as value.
+
+\textbf{Work In Progress}
 
 \paragraph{\textit{Exercise 3.22} (p. 66)} 
 
