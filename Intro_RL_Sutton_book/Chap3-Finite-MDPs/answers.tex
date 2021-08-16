@@ -124,12 +124,13 @@ $G_1$ is directly given by
 G_1 \doteq \sum_{k=0}^\infty \gamma^k R_{k+2} = 7 \sum_{k=0}^\infty \gamma^k = 7 \cdot \frac{1}{1-\gamma} = 70
 \end{equation}
 
-and $G_0 = R_1 + \gamma \cdot G_1 = 2 + 0.9 \cdot 70 = 65$
+by using ($3.10$) from the book and $G_0 = R_1 + \gamma \cdot G_1 = 2 + 0.9 \cdot 70 = 65$.
+
 
 \paragraph{\textit{Exercise 3.10} (p. 56)} Prove the second equality in ($3.10$).
 
 \bigskip
-We want to prove that if the rewards at all time steps are constant $+1$, then the return is $\frac{1}{1-\gamma} < \infty$ for $0 \leq \gamma < 1$
+We want to prove that in the continuing tasks, if the rewards at all time steps are constant $+1$, then the return is $\frac{1}{1-\gamma} < \infty$ for $0 \leq \gamma < 1$
 \begin{equation}
 G_t =\sum_{k=0}^\infty \gamma^k = \frac{1}{1-\gamma}
 \end{equation}
@@ -142,14 +143,33 @@ We first pass the $1-\gamma$ on the other side and do some manipulations to comp
 \paragraph{\textit{Exercise 3.11} (p. 58)} If the current state is $S_t$, and actions are selected according to a stochastic
 policy $\pi$, then what is the expectation of $R_{t+1}$ in terms of $\pi$ and the four-argument dynamics function $p$ ($3.2$)?
 
+\bigskip
+\begin{equation}
+\mathbb{E}_\pi[R_{t+1} \lvert S_t=s] = \sum_{a} \pi(a \lvert s) \sum_{s', r} p(s', r \lvert s, a) r
+\end{equation}
+where $a \in \mathcal{A}(s), r \in \mathcal{R}$, $s$ and $s' \in \mathcal{S}$.
+
+Remark: We can also rewrite (not asked in the exercise) the equality as follows:
+\begin{equation}
+\mathbb{E}_\pi[R_{t+1} \lvert S_t=s] = \sum_{a} \pi(a \lvert s) r(s, a)
+\end{equation}
+
 \paragraph{\textit{Exercise 3.12} (p. 58)} Give an equation for $v_\pi$ in terms of $q_\pi$ and $\pi$.
 
 \bigskip
+\begin{equation}
+\begin{split}
+v_\pi(s) &= \sum_{a} \pi(a \lvert s) \mathbb{E}_\pi[G_t \lvert S_t = s, A_t = a]\\
+&= \sum_{a} \pi(a \lvert s) q_\pi(s, a)
+\end{split}
+\end{equation}
 
 \paragraph{\textit{Exercise 3.13} (p. 58)} Give an equation for $q_\pi$ in terms of $v_\pi$ and the four-argument $p$.
 
 \bigskip
-
+\begin{equation}
+q_\pi(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma v_\pi(s') \right]
+\end{equation}
 
 \paragraph{\textit{Exercise 3.14} (p. 60)} The Bellman equation ($3.14$) must hold for each state for the value function $v_\pi$ shown in Figure $3.2$ (right) of Example $3.5$ (Gridworld). Show numerically that this equation holds for the center state, valued at $+0.7$, with respect to its four neighboring states, valued at
 $+2.3, +0.4, -0.4$, and $+0.7$. (These numbers are accurate only to one decimal place.)
@@ -157,8 +177,63 @@ $+2.3, +0.4, -0.4$, and $+0.7$. (These numbers are accurate only to one decimal 
 \paragraph{\textit{Exercise 3.15} (p. 61)} In the gridworld example, rewards are positive for goals, negative for running into the edge of the world, and zero the rest of the time. Are the signs of these rewards important, or only the intervals between them? Prove, using ($3.8$), that adding a
 constant $c$ to all the rewards adds a constant, $v_c$, to the values of all states, and thus does not affect the relative values of any states under any policies. What is $v_c$ in terms of $c$ and $\gamma$?
 
+\bigskip
+We can first note that the gridworld example is a continuing task. For continuing tasks, we will show that shifting all rewards by a constant $c$ leaves the task unchanged and consequently, only the intervals between rewards are important. Signs of the rewards can change by shifting the rewards.
+
+\bigskip
+Let's denote $\hat{G}_t$ the new return after shifting all the rewards by $c$ and $G_t$ the return before shifting. We can show the relation between $G_t$ and $\hat{G}_t$
+\begin{equation}\label{shift_return}
+\hat{G}_t \doteq \sum_{k=0}^\infty \gamma^k (c + R_{t+k+1}) = G_t + \frac{c}{1-\gamma} = G_t + v_c
+\end{equation}
+where $v_c = \frac{c}{1-\gamma}$ and the second equality comes from the definition of the return for the discounted continuing case and from the ($3.10$) of the book. 
+
+As direct consequence of the equation \ref{shift_return}, the values of all states $\hat{v}_\pi$ after shifting the rewards by $c$ can be written as:
+\begin{equation}
+\begin{split}
+\hat{v}_\pi(s) &\doteq \mathbb{E}_\pi[\hat{G}_t \lvert S_t = s]\\
+&= \mathbb{E}_\pi[ G_t + v_c \lvert S_t = s] = v_\pi(s) + v_c
+\end{split}
+\end{equation}
+because $v_c$ is a constant and $G_t$ is a random variable.
+
+We can then conclude that the goal of the agent is left unchanged, the maximization of expected total reward will lead to the same goal.
+
 \paragraph{\textit{Exercise 3.16} (p. 61)} Now consider adding a constant $c$ to all the rewards in an episodic task, such as maze running. Would this have any effect, or would it leave the task unchanged as in the continuing task above? Why or why not? Give an example.
 
+\bigskip
+If we add a constant $c$ to all the rewards in an episodic task, the task will change because the new return depends on the final time step $T$. If we take the same notations as the previous exercise, we get
+\begin{equation}
+\hat{G}_t \doteq \sum_{k=1}^T (c + R_k) = G_t + c \cdot T = G_t + f_c(T)
+\end{equation}
+where now the new return depends on a function of $T$; $f_c(T) = c \cdot T$ that is not a constant.
+
+As effect on the state values, we have that
+\begin{equation}
+\begin{split}
+\hat{v}_\pi(s) &\doteq \mathbb{E}_\pi[\hat{G}_t \lvert S_t = s]\\
+&= \mathbb{E}_\pi[ G_t + c \cdot T \lvert S_t = s] = v_\pi(s) + c \cdot \mathbb{E}_\pi[T \lvert S_t = s]
+\end{split}
+\end{equation}
+
+where $c \cdot \mathbb{E}_\pi[T \lvert S_t = s]$ can be bigger or lower (depending on the value of $c$) in states where $T$ is in average big.
+
+We also have as relation between the expected final time step and the current time step plus the expected remaining amount of steps until the final step that 
+\begin{equation}\label{eq_expected_final_time_step}
+\mathbb{E}_\pi[T \lvert S_t = s] = \mathbb{E}_\pi[T - t + t \lvert S_t = s] = t + \mathbb{E}_\pi[T - t \lvert S_t = s]
+\end{equation}
+
+As example in maze running, if we suppose that $R_k = -1$ at each time step $k$ and $c = 1$ then by using equation \ref{eq_expected_final_time_step}, we can rewrite the new values of the states as
+\begin{equation}
+\begin{split}
+\hat{v}_\pi(s) &= v_\pi(s) + c \cdot \mathbb{E}_\pi[T \lvert S_t = s]\\
+&= v_\pi(s) + t + \mathbb{E}_\pi[T - t \lvert S_t = s] = t
+\end{split}
+\end{equation}
+
+because $\mathbb{E}_\pi[T - t \lvert S_t = s] = -v_\pi(s)$. The equation explains that the goal of the new task is to 
+
+
+\clearpage
 \paragraph{\textit{Exercise 3.17} (p. 61)} What is the Bellman equation for action values, that is, for $q_\pi$? It must give the action value $q_\pi(s, a)$ in terms of the action values, $q_\pi(s', a')$, of possible successors to the state–action pair ($s, a$).
 Hint: The backup diagram in Figure  \ref{bellman_eq_action_val} corresponds to this equation.
 Show the sequence of equations analogous to ($3.14$), but for action
@@ -201,6 +276,15 @@ action-node/.style = {circle,fill=black, radius=2.5mm, minimum size=2.5mm}
 \caption{$q_\pi$ backup diagram}
 \label{bellman_eq_action_val}
 \end{figure}
+
+\begin{equation}
+\begin{split}
+q_\pi(s, a) &\doteq \mathbb{E}_\pi[G_t \lvert S_t = s, A_t = a]\\
+&= \mathbb{E}_\pi[R_{t+1} + \gamma G_{t+1}\lvert S_t = s, A_t = a]\\
+&= \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \sum_{a'} \pi(a' \lvert s') \mathbb{E}_\pi[G_{t+1} \lvert S_{t+1} = s', A_{t+1} = a']\right]\\
+&= \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \sum_{a'} \pi(a' \lvert s') q_\pi(s', a')\right]
+\end{split}
+\end{equation}
 
 \paragraph{\textit{Exercise 3.18} (p. 62)} The value of a state depends on the values of the actions possible in that state and on how likely each action is to be taken under the current policy. We can
 think of this in terms of a small backup diagram rooted at the state and considering each
