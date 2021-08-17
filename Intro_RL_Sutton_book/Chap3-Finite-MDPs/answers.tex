@@ -429,6 +429,7 @@ Based on the upper part of the Figure $3.3$ in the book that shows the state-val
 
 \textbf{Work In Progress}
 
+\clearpage
 \paragraph{\textit{Exercise 3.22} (p. 66)} 
 
 Consider the continuing MDP shown in Figure \ref{mdp_transition_graph}. The only decision to be made is that in the top state, where two actions are available, \textbf{left} and \textbf{right}. The numbers show the rewards that are received deterministically after each action. There are exactly two deterministic policies,
@@ -471,11 +472,173 @@ action-node/.style = {circle,fill=black, radius=2.5mm, minimum size=2.5mm}
 \label{mdp_transition_graph}
 \end{figure}
 
+We can first recall the discounted continuing formulation of the return
+\begin{equation}
+G_t \doteq \sum_{k=0}^\infty \gamma^k R_{t + k + 1}
+\end{equation}
+
+To find what policy is optimal, we need to recall that a policy is better than another one if the value of all states are better, $\pi \geq \pi' \iff v_\pi(s) \geq v_{\pi'}(s),\,  \forall s \in \mathcal{S}$.
+
+\begin{equation}
+\begin{split}
+v_\pi(\textrm{top state}) &\doteq \mathbb{E}_\pi[G_t \lvert S_t=\textrm{top state}] \\
+&= \sum_{a} \pi(a \lvert \textrm{top state}) \sum_{s', r} p(s', r \lvert \textrm{top state}, a) [r + \gamma v_\pi(s')]\\
+&= \sum_{s', r} p(s', r \lvert \textrm{top state}, a) [r + \gamma v_\pi(s')],\, a \textrm{ such that } \pi(a | \textrm{top state}) = 1\\
+&= \textbf{1}_{\pi = \pi_\textrm{left}} + \gamma \left[2 \cdot \textbf{1}_{\pi = \pi_\textrm{right}} + \gamma v_\pi(\textrm{top state})\right]
+\end{split}
+\end{equation}
+
+The third equality is due to the deterministic policies and the fourth equality is due to the deterministic transitions after taking an action---taking an action gives always the same reward and always moves the agent into the same state.
+
+The value of the top state can be also written as $\sum_{k=0}^\infty (\gamma^2)^k = \frac{1}{1-\gamma^2}$ if $\pi = \pi_\textrm{left}$ or as $2 \sum_{k=0}^\infty \gamma^{2k + 1} = 2 \gamma \sum_{k=0}^\infty \gamma^{2k} = \frac{2 \gamma}{1-\gamma^2}$ if $\pi = \pi_\textrm{right}$. The equation obtained previously from the Bellman equation gives the same values under their policies.
+
+We can now compute the values of the top state for different $\gamma$; for $\gamma=0$, the agent only looks at the expected immediate reward and $v_{\pi_\textrm{left}}(\textrm{top state}) = 1 > v_{\pi_\textrm{right}}(\textrm{top state}) = 0$. For $\gamma=0.9$, the agent is more farsighted and $v_{\pi_\textrm{left}}(\textrm{top state}) = 5.26 < v_{\pi_\textrm{right}}(\textrm{top state}) = 9.47$ and finally for $\gamma=0.5$, their values are exactly the same.
+
+Let's denote the state in which the agent end up after taking action \textbf{left} as the \textit{left state} and let's also denote the state in which the agent end up after taking action \textbf{right} as the \textit{right state}. The values of the remaining states under $\pi_\textrm{left}$ or $\pi_\textrm{right}$ are
+
+\begin{equation}
+\begin{split}
+v_{\pi_\textrm{left}}(\textrm{left state}) &= \sum_{k=0}^\infty \gamma^{2k + 1} = \frac{\gamma}{1-\gamma^2}\\
+v_{\pi_\textrm{right}}(\textrm{left state}) &= 0 + 2\sum_{k=1}^\infty \gamma^{2k}\\
+& = 2\sum_{k=0}^\infty \gamma^{2k} - 1 = 2\frac{1 - (1-\gamma^2)}{1-\gamma^2} = \frac{2 \gamma^2}{1-\gamma^2}\\
+\end{split}
+\end{equation}
+
+
+\begin{equation}
+\begin{split}
+v_{\pi_\textrm{left}}(\textrm{right state}) &= 2 + \sum_{k=0}^\infty \gamma^{2k + 1}\\
+& = 2 + \frac{\gamma}{1 - \gamma^2}\\
+v_{\pi_\textrm{right}}(\textrm{right state}) &= 2\sum_{k=0}^\infty \gamma^{2k} = \frac{2}{1-\gamma^2}\\
+\end{split}
+\end{equation}
+
+We have that for $\gamma = 0$, $v_{\pi_\textrm{left}}(\textrm{left state}) = v_{\pi_\textrm{right}}(\textrm{left state})= 0$ and $v_{\pi_\textrm{left}}(\textrm{right state}) = v_{\pi_\textrm{right}}(\textrm{right state})= 2$ because the agent only looks at the immediate rewards and from what we computed previously for the top state, the optimal policy for $\gamma=0$ is $\pi_\textrm{left}$.
+
+For $\gamma = 0.9$, $v_{\pi_\textrm{left}}(\textrm{left state}) = 4.74 < v_{\pi_\textrm{right}}(\textrm{left state})= 8.53$ and
+
+$v_{\pi_\textrm{left}}(\textrm{right state}) = 2 + 4.74 = 6.74 < v_{\pi_\textrm{right}}(\textrm{right state})= 10.53$ because the agent is more farsighted and from what we computed previously for the top state, the optimal policy for $\gamma=0.9$ is $\pi_\textrm{right}$.
+
+For $\gamma = 0.5$, $v_{\pi_\textrm{left}}(\textrm{left state}) = v_{\pi_\textrm{right}}(\textrm{left state})= 2/3$ and
+
+$v_{\pi_\textrm{left}}(\textrm{right state}) = v_{\pi_\textrm{right}}(\textrm{right state})= 8/3$ and from what we computed previously for the top state, for $\gamma=0.5$,  $\pi_\textrm{right}$ and $\pi_\textrm{left}$ are optimal policies.
+
+
 \paragraph{\textit{Exercise 3.23} (p. 67)} Give the Bellman equation for $q_*$ for the recycling robot.
+
+\bigskip
+The Bellman equation for $q_*$ is in general of this form:
+
+\begin{equation}
+q_*(s, a) = \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \max_{a'} q_*(s', a')\right]
+\end{equation}
+
+We will use an equivalent equation based on the three argument function $p$ and three argument function $r$ so we recall the definition of $r(s, a, s')$ that is the expected reward for state--action--next-state triples (($3.6$) in the book at page $49$)
+\begin{equation}
+\begin{split}
+r(s, a, s') \doteq \mathbb{E}[R_{t+1} \lvert S_t = s, A_t = a, S_{t+1} = s'] &= \sum_{r \in \mathcal{R}} r \cdot p(r \lvert s, a, s')\\
+&= \sum_{r \in \mathcal{R}} r \cdot \frac{p(s', r \lvert s, a)}{p(s' \lvert s, a)}
+\end{split}
+\end{equation}
+
+And this gives us $\sum_{s'} p(s' \lvert s, a) \cdot r(s, a, s') = \sum_{s', r} r \cdot p(s', r \lvert s, a)$ and we substitute it in the Bellman equation for $q_*$.
+
+\begin{equation}
+\begin{split}
+q_*(s, a) &= \sum_{s', r} p(s', r \lvert s, a) \left[r + \gamma \max_{a'} q_*(s', a')\right]\\
+&= \left[\sum_{s'} p(s' \lvert s, a) r(s, a, s')\right] + \left[\gamma \sum_{s', r} p(s', r \lvert s, a) \max_{a'} q_*(s', a')\right]\\
+&= \sum_{s'} p(s' \lvert s, a) \left[r(s, a, s') + \gamma \max_{a'} q_*(s', a')\right]\\
+\end{split}
+\end{equation}
+
+Now that we have the equation we want, the Bellman equation for $q_*$ for the recycling robot can be described by a system of these five following non linear equations, one for each state-action pair.
+
+\begin{equation}
+\begin{split}
+q_*(\textrm{\textbf{h}}, \textrm{\textbf{s}}) &= p(\textrm{\textbf{h}} \lvert \textrm{\textbf{h}}, \textrm{\textbf{s}}) \left[r(\textrm{\textbf{h}}, \textrm{\textbf{s}}, \textrm{\textbf{h}}) + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + p(\textrm{\textbf{l}} \lvert \textrm{\textbf{h}}, \textrm{\textbf{s}}) \left[r(\textrm{\textbf{h}}, \textrm{\textbf{s}}, \textrm{\textbf{l}}) + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+&= \alpha \left[r_\textrm{\textbf{s}} + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + (1-\alpha) \left[r_\textrm{\textbf{s}} + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right] \\
+&= r_\textrm{\textbf{s}} + \gamma \left[\alpha \max_{a'} q_*(\textrm{\textbf{h}}, a') + (1-\alpha) \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+q_*(\textrm{\textbf{h}}, \textrm{\textbf{w}}) &= p(\textrm{\textbf{h}} \lvert \textrm{\textbf{h}}, \textrm{\textbf{w}}) \left[r(\textrm{\textbf{h}}, \textrm{\textbf{w}}, \textrm{\textbf{h}}) + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + p(\textrm{\textbf{l}} \lvert \textrm{\textbf{h}}, \textrm{\textbf{w}}) \left[r(\textrm{\textbf{h}}, \textrm{\textbf{w}}, \textrm{\textbf{l}}) + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+&= 1 \left[r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + 0 \left[r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right] =  r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')
+\end{split}
+\end{equation}
+
+
+\begin{equation}
+\begin{split}
+q_*(\textrm{\textbf{l}}, \textrm{\textbf{s}}) &= p(\textrm{\textbf{h}} \lvert \textrm{\textbf{l}}, \textrm{\textbf{s}}) \left[r(\textrm{\textbf{l}}, \textrm{\textbf{s}}, \textrm{\textbf{h}}) + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + p(\textrm{\textbf{l}} \lvert \textrm{\textbf{l}}, \textrm{\textbf{s}}) \left[r(\textrm{\textbf{l}}, \textrm{\textbf{s}}, \textrm{\textbf{l}}) + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+&= (1-\beta) \left[-3 + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + \beta \left[r_\textrm{\textbf{s}} + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+&= \beta r_\textrm{\textbf{s}} - 3 (1-\beta) + \gamma \left[(1-\beta) \max_{a'} q_*(\textrm{\textbf{h}}, a') + \beta \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]
+\end{split}
+\end{equation}
+
+
+\begin{equation}
+\begin{split}
+q_*(\textrm{\textbf{l}}, \textrm{\textbf{w}}) &= p(\textrm{\textbf{h}} \lvert \textrm{\textbf{l}}, \textrm{\textbf{w}}) \left[r(\textrm{\textbf{l}}, \textrm{\textbf{w}}, \textrm{\textbf{h}}) + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + p(\textrm{\textbf{l}} \lvert \textrm{\textbf{l}}, \textrm{\textbf{w}}) \left[r(\textrm{\textbf{l}}, \textrm{\textbf{w}}, \textrm{\textbf{l}}) + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+&= 0 \left[r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + 1 \left[r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right] =  r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+q_*(\textrm{\textbf{l}}, \textrm{\textbf{re}}) &= p(\textrm{\textbf{h}} \lvert \textrm{\textbf{l}}, \textrm{\textbf{re}}) \left[r(\textrm{\textbf{l}}, \textrm{\textbf{re}}, \textrm{\textbf{h}}) + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\right]\\
+& + p(\textrm{\textbf{l}} \lvert \textrm{\textbf{l}}, \textrm{\textbf{re}}) \left[r(\textrm{\textbf{l}}, \textrm{\textbf{re}}, \textrm{\textbf{l}}) + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+&= 1 \cdot \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\\
+& + 0 \cdot \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a') =  \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')
+\end{split}
+\end{equation}
+
+In summary, we have this system of non linear equations:
+
+\begin{equation}
+\begin{split}
+q_*(\textrm{\textbf{h}}, \textrm{\textbf{s}}) &= r_\textrm{\textbf{s}} + \gamma \left[\alpha \max_{a'} q_*(\textrm{\textbf{h}}, a') + (1-\alpha) \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+q_*(\textrm{\textbf{h}}, \textrm{\textbf{w}}) &=  r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')\\
+q_*(\textrm{\textbf{l}}, \textrm{\textbf{s}}) &= \beta r_\textrm{\textbf{s}} - 3 (1-\beta) + \gamma \left[(1-\beta) \max_{a'} q_*(\textrm{\textbf{h}}, a') + \beta \max_{a'} q_*(\textrm{\textbf{l}}, a')\right]\\
+q_*(\textrm{\textbf{l}}, \textrm{\textbf{w}}) &=  r_\textrm{\textbf{w}} + \gamma \max_{a'} q_*(\textrm{\textbf{l}}, a')\\
+q_*(\textrm{\textbf{l}}, \textrm{\textbf{re}}) &= \gamma \max_{a'} q_*(\textrm{\textbf{h}}, a')
+\end{split}
+\end{equation}
+
 
 \paragraph{\textit{Exercise 3.24} (p. 67)} Figure $3.5$ (Gridworld) gives the optimal value of the best state of the gridworld as $24.4$, to one decimal place. Use your knowledge of the optimal policy and ($3.8$) to express this value symbolically, and then to compute it to three decimal places.
 
-\clearpage
+\bigskip
+By using our knowledge of the optimal policy, the dynamics of the environment and how the return is expressed in the discounted continuing case, we can obtain $10 + \gamma v_*(\textrm{\textbf{A'}})$ directly where \textbf{A'} is the state that we end up in after taking any action from \textbf{A}. The expected return from the state \textbf{A} by following the optimal policy is always an immediate reward of $+10$ plus the discounted expected return for the state \textbf{A'} under the optimal policy.
+
+\bigskip
+A bit more formally by using the Bellman Optimality equation, the optimal value of state \textbf{A} is
+\begin{equation}
+\begin{split}
+v_*(\textrm{\textbf{A}}) &= \max_{a} \sum_{s', r} p(s', r \lvert \textrm{\textbf{A}}, a) [r + \gamma v_*(s')]\\
+&= \sum_{r} p(r \lvert \textrm{\textbf{A}}, a) [r + \gamma v_*(\textrm{\textbf{A'}})]\\
+&= r_\textrm{\textbf{A}} + \gamma v_*(\textrm{\textbf{A'}}),\quad r_\textrm{\textbf{A}} = +10
+\end{split}
+\end{equation}
+
+The second equality comes from the fact that the future next state is the same for all actions in the state \textbf{A}.
+
+\begin{equation}
+\begin{split}
+v_*(\textrm{\textbf{A}}) &= 10 + 0.9 \cdot 16 = 10 + 9 + 5.4 = 24.400
+\end{split}
+\end{equation}
+
+
 \paragraph{\textit{Exercise 3.25} (p. 67)} Give an equation for $v_*$ in terms of $q_*$.
 
 \bigskip
