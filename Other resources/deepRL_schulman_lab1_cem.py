@@ -89,7 +89,8 @@ def make_policy(theta):
         raise NotImplementedError
 
 # Task settings:
-env = gym.make('Pendulum-v0').env # Change as needed, CartPole-v0, MountainCar-v0
+env = gym.make('Acrobot-v1').env # Change as needed, CartPole-v0, MountainCar-v0,
+# Pendulum-v0, Acrobot-v1
 num_steps = 1000 # maximum length of episode
 # Alg settings:
 n_iter = 100 # number of iterations of CEM
@@ -130,4 +131,4 @@ for iteration in range(n_iter):
 plt.plot(fs)
 plt.xlabel("iter")
 plt.ylabel("Mean reward")
-plt.title("CEM for Pendulum-v0")
+plt.title("CEM for Acrobot-v1")
