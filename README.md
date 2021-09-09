@@ -14,6 +14,7 @@
 * [Deep RL course, Thomas Simonini](https://simoninithomas.github.io/deep-rl-course/)
 * [John Schulman lectures on Deep RL](https://www.youtube.com/channel/UCBOEQxX6zdihFB3VxxJdgHg/videos)
 * [Pieter Abbeel, Foundations of Deep RL](https://www.youtube.com/watch?v=2GwBez0D20A&list=PLwRJQ4m4UJjNymuBM9RdmB3Z9N5-0IlY0)
+* Udacity course on Deep RL
 
 ### Coursera or others
 * [Practical RL](https://github.com/yandexdataschool/Practical_RL)
