@@ -1,0 +1,34 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+
+\title{Chapter 1 - Introduction Exercises}
+\author{Stéphane Liem NGUYEN}
+\begin{document}
+\maketitle
+
+Exercises with (\textbf{\textit{corrected}}) were corrected based on the \href{http://incompleteideas.net/book/errata.html}{Errata}
+
+\paragraph{\textit{Exercise 1.1: Self-Play} (p. 12)}  Suppose, instead of playing against a random opponent, the reinforcement learning algorithm described above played against itself, with both sides learning. What do you think would happen in this case? Would it learn a different policy for selecting moves?
+
+\paragraph{\textit{Exercise 1.2: Symmetries} (p. 12)} Many tic-tac-toe positions appear different but are really the same because of symmetries. How might we amend the learning process described above to take advantage of this? In what ways would this change improve the learning process? Now think again. Suppose the opponent did not take advantage of symmetries. In that case, should we? Is it true, then, that symmetrically equivalent positions should necessarily have the same value?
+
+\paragraph{\textit{Exercise 1.3: Greedy Play} (p. 12)} Suppose the reinforcement learning player was \textit{greedy}, that is, it always played the move that brought it to the position that it rated the best. Might it learn to play better, or worse, than a nongreedy player? What problems might occur?
+
+\paragraph{\textit{Exercise 1.4: Learning from Exploration} (p. 13)} Suppose learning updates occurred after \textit{all} moves, including exploratory moves. If the step-size parameter is appropriately reduced over time (but not the tendency to explore), then the state values would converge to a different set of probabilities. What (conceptually) are the two sets of probabilities computed when we do, and when we do not, learn from exploratory moves? Assuming that we do continue to make exploratory moves, which set of probabilities might be better to learn? Which would result in more wins?
+
+\paragraph{\textit{Exercise 1.5: Other Improvements} (p. 13)} Can you think of other ways to improve the reinforcement learning player? Can you think of any better way to solve the tic-tac-toe problem as posed?
+
+\end{document}
