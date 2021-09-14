@@ -19,5 +19,6 @@
 ### Coursera or others
 * [Practical RL](https://github.com/yandexdataschool/Practical_RL)
 * [Arxiv Insights: Introduction, Reward Shaping, PPO etc.](https://www.youtube.com/c/ArxivInsights)
+* [Key papers for RL](https://spinningup.openai.com/en/latest/spinningup/keypapers.html)
 
 
