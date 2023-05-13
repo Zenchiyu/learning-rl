@@ -6,7 +6,9 @@
 * [RL course](https://youtube.com/playlist?list=PLqYmG7hTraZBiG_XpjnPrSNw-1XQaM_gB) by David Silver
 * [Algorithms for RL, has more formal notations](https://sites.ualberta.ca/~szepesva/papers/RLAlgsInMDPs.pdf)
 * [Henry AI Lab videos series complementary to each chapters of Sutton and Barto's book](https://www.youtube.com/watch?v=4SLGEq_HZxk&list=PLnn6VZp3hqNvRrdnMOVtgV64F_O-61C1D)
-
+* [Mutual Information video series on RL fundamentals (concise + assumptions)](https://youtube.com/playlist?list=PLzvYlJMoZ02Dxtwe-MmH4nOB5jYlMGBjr)
+* [A (Long) Peek into Reinforcement Learning](https://lilianweng.github.io/posts/2018-02-19-rl-overview/)
+ 
 ### Deep Reinforcement Learning
 * [Deep RL bootcamp with Pieter Abbeel et al.](https://sites.google.com/view/deep-rl-bootcamp/lectures)
 * [Spinning up OpenAI, Learn about Deep RL](https://spinningup.openai.com/en/latest/)
